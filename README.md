@@ -116,6 +116,3 @@ behind-the-search/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Contact
-
-For inquiries or support, please contact [your-email@example.com](mailto:your-email@example.com).
