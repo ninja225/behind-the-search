@@ -37,4 +37,4 @@ def logoutUser(request):
     return redirect('landing-page')
 
 def landingPage(request):
-    return render(request,'users/landing-p.html')
+    return render(request,'landing-p.html')
