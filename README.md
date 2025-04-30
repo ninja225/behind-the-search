@@ -10,6 +10,22 @@ A modern, responsive web platform for delivering a comprehensive Search Engine R
 - **Admin Dashboard**: Manage user access, monitor platform usage, and view analytics
 - **Mobile-Responsive Design**: Optimized learning experience across all devices
 - **Manual Access Control**: Admin grants course access after confirming payment
+- **Advanced Video Security**:
+  - Dynamic watermarking with user identification
+  - Copy protection and download prevention
+  - Encrypted video streaming
+  - Session-based access controls
+
+## 🔒 Content Protection
+
+This platform implements multiple layers of security to protect course content:
+
+- **Dynamic Watermarking**: Each video is overlaid with the viewer's personal information
+- **Anti-Download Measures**: Disabled right-click, custom video player with no download option
+- **Encryption**: Video content is encrypted during storage and streaming
+- **Session Management**: Time-limited viewing sessions with re-authentication requirements
+- **Screen Recording Prevention**: Visual safeguards against unauthorized screen recording
+- **Access Monitoring**: IP and device tracking to prevent account sharing
 
 ## 🛠️ Tech Stack
 
@@ -102,17 +118,21 @@ behind-the-search/
 ## 👥 Admin Features
 
 - View registered users and their activity
+- Grant/revoke course access
 - Ban/unban users
 - View platform insights and analytics
+- Monitor security logs for unusual activity
+- Manage session and device access
 
 ## 👤 User Features
 
 - Register and request access to the course
-- Access secure video lessons
+- Access secure video lessons with content protection
 - Track course progress
+- Download additional resources (non-video content)
 - Resume lessons from where they left off
+- View on authorized devices only
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-

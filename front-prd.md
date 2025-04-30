@@ -82,18 +82,27 @@ Design and develop a clean, modern, and visually appealing front end for a websi
 
 ### 4. Course Player Page
 
-- Video player embedded with playback controls
+- Custom secure video player with:
+  - Dynamic user-specific watermarking overlay (email/username/ID displayed)
+  - Disabled browser context menu and keyboard shortcuts
+  - No download or right-click options
+  - Custom playback controls (no browser native controls)
+  - Visible watermark that remains during playback (semi-transparent in corner)
 - Sidebar with lesson titles organized by modules (e.g., "Understanding Search Quality", "Rating Techniques")
-- Lesson status (watched/incomplete)
+- Warning message about content protection and consequences of unauthorized sharing
+- Session timer showing remaining viewing time before re-authentication needed
 - Progress bar showing overall course completion
-- Resource download section for supplementary materials
+- Resource download section for supplementary materials (non-video content only)
 
 ### 5. Admin Dashboard UI
 
 - Table of users (sortable, searchable)
+- Access toggle per user (grant/revoke)
 - Ban/unban button with status highlight
 - Charts/insights: user count, access count, activity log
 - Course analytics (most/least watched lessons)
+- Video security logs (showing unusual activities like multiple device access)
+- IP and device management for suspicious activity
 
 ---
 
@@ -120,9 +129,13 @@ Design and develop a clean, modern, and visually appealing front end for a websi
 ## 6. Tools & Frameworks
 
 - **HTML5 / CSS3**
-- **Vanilla JavaScript** (or minimal framework if needed)
+- **JavaScript** (vanilla or minimal framework if needed)
 - **Tailwind CSS** (preferred for utility and speed)
 - **SVG Icons** (Lucide or Heroicons)
+- **Video Security Libraries**:
+  - HLS.js or Shaka Player for encrypted streaming
+  - Custom watermarking overlay solution
+  - Canvas-based video protection layer
 
 ---
 
@@ -142,3 +155,30 @@ Design and develop a clean, modern, and visually appealing front end for a websi
 - User profile page with achievement badges
 - Interactive practice exercises for search rating skills
 - Note-taking feature for lessons
+- Advanced video analytics (heatmap of most-watched sections)
+- More sophisticated video watermarking with pattern recognition for leak detection
+
+---
+
+## 9. Video Security Approach
+
+### Watermarking Implementation
+
+- Dynamic text overlay with user information (semi-transparent)
+- Randomized positioning that changes periodically during playback
+- Canvas-based watermarking to prevent simple DOM manipulation removal
+
+### Anti-Piracy Measures
+
+- Session-based tokens that expire after a set time
+- Device fingerprinting to limit concurrent viewing
+- JavaScript traps to detect screen recording software
+- Visual pattern distortions when screen recording is detected
+- Disabled browser developer tools for video elements
+
+### User Experience Considerations
+
+- Clear explanation of security measures during onboarding
+- Non-intrusive watermark placement that doesn't disrupt learning
+- Smooth playback despite security layers
+- Terms of service agreement specific to content protection

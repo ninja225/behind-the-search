@@ -35,7 +35,12 @@ Build a clean, modern, and functional website that offers a **paid Search Engine
 ### 3. Course Access Page (Private Area)
 
 - Accessible only to users with granted access (approved manually by admin)
-- Structured course content with video player (HTML5 video or embedded player)
+- Structured course content with secure video player (HTML5 video with DRM protection)
+- Video security features:
+  - Watermarking with user identification
+  - Disabled right-click and download functionality
+  - Encrypted video streams
+  - Session-based viewing restrictions
 - Navigation for course sections/lessons on Search Engine Rating techniques
 - Downloadable resources (worksheets, rating guidelines, practice materials)
 
@@ -74,10 +79,22 @@ class Profile(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=255)
     video_url = models.URLField()
+    encrypted_path = models.CharField(max_length=255, blank=True)  # Path to encrypted video
+    watermark_enabled = models.BooleanField(default=True)
     order = models.PositiveIntegerField()
     is_published = models.BooleanField(default=True)
     description = models.TextField(blank=True)
     duration = models.PositiveIntegerField(default=0)  # Duration in seconds
+
+class VideoSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    session_id = models.CharField(max_length=255)
+    ip_address = models.GenericIPAddressField()
+    device_info = models.TextField()
+    started_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
 
 class Resource(models.Model):
     title = models.CharField(max_length=255)
@@ -103,20 +120,42 @@ class LessonProgress(models.Model):
 - **Frontend**: HTML, CSS (modern, responsive), JavaScript (vanilla or minimal framework)
 - **Backend**: Django (Python)
 - **Database**: SQLite (for simplicity in the MVP stage)
+- **Video Security**:
+  - Encrypted HLS/DASH streaming
+  - Dynamic watermarking service
+  - Video content protection with custom player
 - **Deployment**: Any free-tier hosting (e.g., Vercel for frontend, Render/Railway for Django backend)
 
 ---
 
-## 6. Success Criteria
+## 6. Security Measures
 
-- Users can register, log in, and request access to the Search Engine Rating course
-- Admin can manage users, access rights, and view basic metrics
-- The course content is secure and only visible to authorized users
-- Users can track their progress through the course
+- **Video Content Protection**:
+  - Dynamic user-specific watermarking with identifiable information (email/user ID)
+  - Disabled browser video controls for download/save
+  - Encrypted video storage and streaming
+  - Time-limited video session tokens
+  - Device and IP restrictions for video playback
+  - Anti-screen recording measures (visual artifacts for screen capture)
+- **User Authentication Security**:
+  - JWT-based authentication with short expiry
+  - Rate limiting for login attempts
+  - Session management and forced logout capabilities
+  - Admin ability to revoke access immediately
 
 ---
 
-## 7. Out of Scope (for MVP)
+## 7. Success Criteria
+
+- Users can register, log in, and request access to the Search Engine Rating course
+- Admin can manage users, access rights, and view basic metrics
+- The course content is secure with multiple layers of protection against unauthorized copying
+- Users can track their progress through the course
+- Video content cannot be easily downloaded or screen-recorded without visible watermarks
+
+---
+
+## 8. Out of Scope (for MVP)
 
 - Online payments
 - Multi-course support
