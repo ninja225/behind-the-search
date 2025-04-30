@@ -1,0 +1,11 @@
+<!-- content/templates/content/create_course_video.html -->
+
+<h1>Create a New Course Video</h1>
+
+<form method="POST" enctype="multipart/form-data">  <!-- enctype required for file uploads -->
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Render the form fields -->
+    <button type="submit">Save Video</button>
+</form>
+
+<a href="{% url 'video_list' %}">Back to video list</a>
