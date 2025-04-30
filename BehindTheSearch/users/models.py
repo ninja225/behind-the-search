@@ -3,3 +3,4 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser (AbstractUser):
     phone_number = models.CharField(max_length=15,null = False,blank = False)
+    access = models.BooleanField(default=False)
