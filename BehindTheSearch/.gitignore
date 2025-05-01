@@ -8,7 +8,8 @@
 *.sln
 *.sw?
 venv
-migrations
+
+# Python compiled files
 __pycache__/
 *.py[cod]
-*.pyc
+*$py.class
