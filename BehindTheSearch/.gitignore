@@ -11,3 +11,4 @@ venv
 migrations
 __pycache__/
 *.py[cod]
+*.pyc
