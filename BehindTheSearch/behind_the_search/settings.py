@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'content',
     'users.apps.UsersConfig',
+    'phonenumber_field',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
