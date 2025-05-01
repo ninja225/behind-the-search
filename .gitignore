@@ -8,7 +8,10 @@
 *.sln
 *.sw?
 venv
-# Python bytecode
+
+
+# Python compiled files
 __pycache__/
 *.py[cod]
 *.pyc
+
