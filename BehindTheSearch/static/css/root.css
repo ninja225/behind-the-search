@@ -3,28 +3,54 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 :root {
+  /* 60% - Main colors (background) */
+  --Background: #12121a; /* Even darker base for true dark mode */
+  --Background-Secondary: #1a1a27;
+  --Background-Tertiary: #24243a;
+
+  /* 30% - Secondary colors (surfaces, containers) */
+  --Surface: #1e1e2f;
+  --Surface-Hover: #2a2a42;
+  --Surface-Elevated: #2f2f48;
+
+  /* 10% - Accent colors (buttons, highlights) */
   --Primary: #8e00a3; /* Primary purple */
+  --Primary-Dark: #6c0080;
+  --Primary-Light: #a429b4;
   --Accent: #d16adf; /* Accent fuchsia */
+  --Accent-Light: #e690f2;
 
-  --Background: #1c1c1e; /* Dark mode base */
-  --Background-Secondary: #2a2a2e;
-  --Background-Tertiary: #3b3b42;
-
-  --Surface: #2d2d30;
-  --Surface-Hover: #3a3a3d;
-
+  /* Text colors */
   --Text-Primary: #ffffff;
-  --Text-Secondary: #cccccc;
-  --Text-Disabled: #777777;
+  --Text-Secondary: #b8b8d0;
+  --Text-Disabled: #6c6c89;
 
-  --Border: #444444;
+  /* UI element colors */
+  --Border: #34344a;
   --Border-Focus: #d16adf;
+  --Divider: #2d2d44;
 
+  /* Interactive states */
   --Button-Hover: #a620b6;
   --Button-Active: #79007f;
-
   --Link: #d16adf;
-  --Link-Hover: #ffffff;
+  --Link-Hover: #e690f2;
+
+  /* Feedback colors */
+  --Success: #36d399;
+  --Warning: #fb923c;
+  --Error: #e35a91;
+  --Info: #38bdf8;
+
+  /* Shadows */
+  --Shadow-Small: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --Shadow-Medium: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --Shadow-Large: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Animation speeds */
+  --Transition-Fast: 0.15s ease;
+  --Transition-Normal: 0.3s ease;
+  --Transition-Slow: 0.5s ease;
 }
 
 body {
@@ -40,7 +66,21 @@ body {
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  width: 10px;
+  display: block;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--Background-Secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--Primary-Dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--Primary);
 }
 
 @keyframes bganimate {
@@ -52,5 +92,17 @@ body {
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
   }
 }
