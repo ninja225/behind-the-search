@@ -1,5 +1,6 @@
-      {% extends 'base.html' %} {% load static %} {% block title %}تسجيل الدخول -
-Behind The Search{% endblock %} {% block content %}
+      {% extends 'base.html' %} 
+      {% load static %} {% block title %}تسجيل الدخول -Behind The Search{% endblock %}
+      {% block content %} 
       <form action="" method="post" class="form auth__form">
         <!-- Input:username -->
         {% csrf_token %}
@@ -36,3 +37,4 @@ Behind The Search{% endblock %} {% block content %}
       </div>
     </div>
   </div>
+  {% endblock %}
