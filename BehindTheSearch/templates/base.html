@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="ar">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -80,13 +80,23 @@
             />
           </a>
         </div>
+        <div class="site-title">
+          <h1 class="gradient-text" data-text="Behind The Search">
+            Behind The Search
+          </h1>
+        </div>
         <div class="nav-links">
           {% if user.is_authenticated %}
-          <!-- <a href="{% url 'video_list' %}" class="nav-link">محتوى الكورس</a> -->
-          <a href="{% url 'logout' %}" class="nav-link">تسجيل الخروج</a>
+          <a href="{% url 'logout' %}" class="nav-button btn-logout">
+            <span>Logout</span>
+          </a>
           {% else %}
-          <a href="{% url 'login' %}" class="nav-link">تسجيل الدخول</a>
-          <a href="{% url 'register' %}" class="nav-link">التسجيل</a>
+          <a href="{% url 'login' %}" class="nav-button btn-login">
+            <span>Login</span>
+          </a>
+          <a href="{% url 'register' %}" class="nav-button btn-register">
+            <span>Register</span>
+          </a>
           {% endif %}
         </div>
       </nav>
@@ -154,33 +164,3 @@
     {% block extra_js %}{% endblock %}
   </body>
 </html>
-
-<!-- Toast Test Button (Only visible during development) -->
-<!-- <div class="toast-test-container">
-        <div class="toast-test-buttons">
-          <button
-            onclick="showToast('نجاح', 'تم تنفيذ العملية بنجاح', 'success')"
-            class="toast-test-btn success"
-          >
-            <i class="fas fa-check-circle"></i> اختبار رسالة النجاح
-          </button>
-          <button
-            onclick="showToast('تنبيه', 'يرجى الانتباه إلى هذه الملاحظة', 'info')"
-            class="toast-test-btn info"
-          >
-            <i class="fas fa-info-circle"></i> اختبار رسالة المعلومات
-          </button>
-          <button
-            onclick="showToast('تحذير', 'يرجى التحقق من البيانات المدخلة', 'warning')"
-            class="toast-test-btn warning"
-          >
-            <i class="fas fa-exclamation-triangle"></i> اختبار رسالة التحذير
-          </button>
-          <button
-            onclick="showToast('خطأ', 'حدث خطأ أثناء تنفيذ العملية', 'error')"
-            class="toast-test-btn error"
-          >
-            <i class="fas fa-times-circle"></i> اختبار رسالة الخطأ
-          </button>
-        </div>
-      </div> -->
