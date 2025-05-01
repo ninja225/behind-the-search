@@ -97,7 +97,8 @@ spline-viewer {
 
 .hero-content {
   flex: 1;
-  z-index: 2;
+  z-index: 10; /* Increased from 2 to ensure it's above other elements */
+  position: relative; /* Added to create a new stacking context */
 }
 
 .hero-title {
@@ -138,6 +139,8 @@ spline-viewer {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  position: relative; /* Added to create a new stacking context */
+  z-index: 15; /* Added to ensure it's above other elements */
 }
 
 .cta-button {
@@ -150,6 +153,8 @@ spline-viewer {
   transition: all var(--Transition-Normal);
   text-decoration: none;
   cursor: pointer;
+  position: relative; /* Added to create a new stacking context */
+  z-index: 20; /* Increased to ensure buttons are clickable */
 }
 
 .primary-cta {
@@ -252,7 +257,7 @@ spline-viewer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
-  margin-top: -3rem;
+  margin-top: 1.5rem;
   width: 100%;
 }
 
