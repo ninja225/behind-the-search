@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'content',
     'users.apps.UsersConfig',
     'phonenumber_field',
+    'notifications',
 ]
 
 
