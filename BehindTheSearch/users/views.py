@@ -4,22 +4,27 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from . models import CustomUser
 def loginUser(request):
-
     if request.user.is_authenticated:
         return redirect('landing-page')
+
     if request.method == 'POST':
         username = request.POST['username'].lower()
         password = request.POST['password']
+
         try:
-            user = CustomUser.objects.get(username = username)
-        except:
-            messages.error(request,'Username does not exist')
-        user = authenticate(request,username = username,password = password)
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Username does not exist')
+            return render(request, 'users/login.html')
+
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request,user)
+            login(request, user)
+            return redirect('landing-page')
         else:
-            messages.error(request,"Username or Password is incorrect")
-    return render(request,'users/login.html')
+            messages.error(request, "Username or Password is incorrect")
+
+    return render(request, 'users/login.html')
 
 def registerUser(request):
     form = CustomUserCreationForm()
