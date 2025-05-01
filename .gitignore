@@ -9,7 +9,9 @@
 *.sw?
 venv
 
+
 # Python compiled files
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyc
+
