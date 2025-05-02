@@ -8,9 +8,10 @@ from django.db.models import Q
 from django.shortcuts import render
 from .models import Notification
 
+@superuser_required
 def notification_list(request):
     search_query = request.GET.get('search', '')
-    notifications = Notification.objects.all()
+    notifications = Notification.objects.all().order_by('-created_at')
 
     if search_query:
         notifications = notifications.filter(from_user__username__icontains=search_query)
