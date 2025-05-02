@@ -11,32 +11,6 @@
   overflow: hidden;
 }
 
-.register-section::before {
-  content: "";
-  position: absolute;
-  top: -20%;
-  right: -10%;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--Primary-Dark) 0%, transparent 70%);
-  opacity: 0.15;
-  z-index: 0;
-}
-
-.register-section::after {
-  content: "";
-  position: absolute;
-  bottom: -20%;
-  left: -10%;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--Primary-Dark) 0%, transparent 70%);
-  opacity: 0.1;
-  z-index: 0;
-}
-
 .register-container {
   max-width: 450px;
   width: 100%;
@@ -56,21 +30,6 @@
 .register-header {
   text-align: center;
   margin-bottom: 1.25rem;
-}
-
-.register-header .logo-container {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.register-logo {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
 }
 
 .register-title {
@@ -239,6 +198,24 @@ input[type="password"] {
   text-decoration: underline;
 }
 
+/* Terms Button */
+.terms-button {
+  background: none;
+  border: none;
+  color: var(--Primary);
+  padding: 0;
+  font-size: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--Transition-Fast);
+}
+
+.terms-button:hover {
+  color: var(--Primary-Light);
+  text-decoration: underline;
+}
+
 /* Register Button */
 .register-button {
   display: flex;
@@ -313,12 +290,18 @@ input[type="password"] {
 /* Alternative Register Link */
 .register-alternative {
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .register-alternative p {
   color: var(--Text-Secondary);
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .alternative-link {
@@ -331,6 +314,219 @@ input[type="password"] {
 .alternative-link:hover {
   color: var(--Primary-Light);
   text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--Surface);
+  width: 90%;
+  max-width: 600px;
+  border-radius: 1rem;
+  box-shadow: var(--Shadow-Large);
+  margin: 1.5rem auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--Border);
+  background-color: var(--Surface-Elevated);
+}
+
+.modal-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-radius: 0.25rem;
+  color: var(--Text-Secondary);
+  cursor: pointer;
+  transition: all var(--Transition-Fast);
+}
+
+.tab-button.active {
+  background-color: var(--Primary);
+  color: var(--Text-Primary);
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--Text-Secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--Transition-Fast);
+}
+
+.close-modal:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--Text-Primary);
+}
+
+.modal-body {
+  padding: 1rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.terms-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--Text-Secondary);
+}
+
+.terms-content p {
+  margin-bottom: 1rem;
+}
+
+.terms-content strong {
+  color: var(--Text-Primary);
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--Border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--Surface-Elevated);
+}
+
+.modal-agree {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.modal-agree input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--Primary);
+}
+
+.modal-agree label {
+  font-size: 0.85rem;
+  color: var(--Text-Secondary);
+}
+
+/* Tooltip for disabled checkbox */
+.modal-agree input[type="checkbox"]:disabled + label {
+  cursor: not-allowed;
+}
+
+.modal-agree input[type="checkbox"]:disabled + label::after {
+  content: "Please view and scroll through both Terms of Service and Privacy Policy tabs before agreeing";
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 250px;
+  background-color: var(--Surface-Elevated);
+  color: var(--Text-Primary);
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  box-shadow: var(--Shadow-Medium);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 10;
+  text-align: center;
+}
+
+.modal-agree input[type="checkbox"]:disabled + label::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--Surface-Elevated) transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 10;
+}
+
+.modal-agree input[type="checkbox"]:disabled:hover + label::after,
+.modal-agree input[type="checkbox"]:disabled:hover + label::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+.agree-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--Primary);
+  color: var(--Text-Primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--Transition-Fast);
+}
+
+.agree-button:hover:not(:disabled) {
+  background-color: var(--Primary-Light);
+  transform: translateY(-2px);
+}
+
+.agree-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Responsive Styles */
@@ -360,12 +556,56 @@ input[type="password"] {
     padding: 0.65rem 1.25rem;
   }
 
-  .register-header .logo-container {
-    width: 50px;
-    height: 50px;
-  }
-
   .checkbox-container label {
     font-size: 0.75rem;
+  }
+
+  .register-alternative {
+    margin-top: 0.75rem;
+  }
+
+  .register-alternative p {
+    font-size: 0.85rem;
+  }
+
+  .alternative-link {
+    font-size: 0.85rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 1rem auto;
+  }
+
+  .modal-header {
+    padding: 0.75rem;
+  }
+
+  .modal-body {
+    padding: 0.75rem;
+    max-height: 50vh;
+  }
+
+  .tab-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .terms-content {
+    font-size: 0.85rem;
+  }
+
+  .modal-footer {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .modal-agree {
+    width: 100%;
+  }
+
+  .agree-button {
+    width: 100%;
   }
 }

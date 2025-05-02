@@ -9,6 +9,181 @@ document.addEventListener("DOMContentLoaded", function () {
   const strengthProgress = document.querySelector(".strength-progress");
   const termsCheckbox = document.getElementById("terms");
 
+  // Terms modal elements
+  const termsModal = document.getElementById("termsModal");
+  const openTermsModalBtn = document.getElementById("openTermsModal");
+  const closeModalBtn = document.querySelector(".close-modal");
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabContents = document.querySelectorAll(".tab-content");
+  const modalAgreeCheckbox = document.getElementById("modalAgree");
+  const confirmAgreementBtn = document.getElementById("confirmAgreement");
+
+  // Track user interaction with tabs
+  let tabsVisited = {
+    terms: false,
+    privacy: false,
+  };
+  let tabsScrolled = {
+    terms: false,
+    privacy: false,
+  };
+
+  // Terms modal functionality
+  if (openTermsModalBtn && termsModal) {
+    // Open modal when terms link is clicked
+    openTermsModalBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      openTermsModal();
+    });
+
+    // Function to open terms modal
+    function openTermsModal() {
+      termsModal.classList.add("active");
+      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
+
+      // If the terms checkbox is already checked (somehow), uncheck it
+      if (termsCheckbox && termsCheckbox.checked) {
+        termsCheckbox.checked = false;
+      }
+
+      // Reset modal agree checkbox
+      if (modalAgreeCheckbox) {
+        modalAgreeCheckbox.checked = false;
+        modalAgreeCheckbox.disabled = true; // Disable checkbox until requirements are met
+      }
+
+      // Disable confirm button
+      if (confirmAgreementBtn) {
+        confirmAgreementBtn.disabled = true;
+      }
+
+      // Set the first tab as visited
+      const activeTab = document.querySelector(".tab-button.active");
+      if (activeTab) {
+        tabsVisited[activeTab.getAttribute("data-tab")] = true;
+      }
+
+      // Check scroll status for the active tab content
+      checkScrollStatus();
+
+      // Update checkbox status
+      updateCheckboxStatus();
+    }
+
+    // Prevent direct checkbox interaction - must use the modal
+    if (termsCheckbox) {
+      termsCheckbox.addEventListener("click", function (e) {
+        // If the user tries to check the box directly, prevent it and open the modal
+        e.preventDefault();
+        openTermsModal();
+      });
+    }
+
+    // Close modal when close button is clicked
+    closeModalBtn.addEventListener("click", function () {
+      termsModal.classList.remove("active");
+      document.body.style.overflow = "";
+    });
+
+    // Close modal when clicking outside of content
+    termsModal.addEventListener("click", function (e) {
+      if (e.target === termsModal) {
+        termsModal.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Tab switching
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const tabId = this.getAttribute("data-tab");
+
+        // Mark this tab as visited
+        tabsVisited[tabId] = true;
+
+        // Update active tab button
+        tabButtons.forEach((btn) => btn.classList.remove("active"));
+        this.classList.add("active");
+
+        // Show selected tab content
+        tabContents.forEach((content) => {
+          content.classList.remove("active");
+          if (content.id === `${tabId}Tab`) {
+            content.classList.add("active");
+
+            // Check scroll status for newly activated tab
+            setTimeout(checkScrollStatus, 100);
+          }
+        });
+
+        // Update checkbox status
+        updateCheckboxStatus();
+      });
+    });
+
+    // Track scrolling in tab content
+    tabContents.forEach((content) => {
+      content.addEventListener("scroll", function () {
+        const tabId = this.id.replace("Tab", "");
+        const scrollableHeight = this.scrollHeight - this.clientHeight;
+
+        // Consider scrolled if user has scrolled to 80% of the content
+        if (this.scrollTop >= scrollableHeight * 0.8) {
+          tabsScrolled[tabId] = true;
+          updateCheckboxStatus();
+        }
+      });
+    });
+
+    // Function to check scroll status of active tab
+    function checkScrollStatus() {
+      const activeTabContent = document.querySelector(".tab-content.active");
+      if (activeTabContent) {
+        const tabId = activeTabContent.id.replace("Tab", "");
+        // For very short content, mark as scrolled automatically
+        if (activeTabContent.scrollHeight <= activeTabContent.clientHeight) {
+          tabsScrolled[tabId] = true;
+        }
+      }
+    }
+
+    // Function to update checkbox status based on tab interactions
+    function updateCheckboxStatus() {
+      if (modalAgreeCheckbox) {
+        // Enable checkbox only if all tabs are visited and scrolled
+        const allTabsVisited = Object.values(tabsVisited).every(
+          (value) => value
+        );
+        const allTabsScrolled = Object.values(tabsScrolled).every(
+          (value) => value
+        );
+
+        modalAgreeCheckbox.disabled = !(allTabsVisited && allTabsScrolled);
+
+        // If the checkbox is checked but requirements aren't met, uncheck it
+        if (modalAgreeCheckbox.checked && modalAgreeCheckbox.disabled) {
+          modalAgreeCheckbox.checked = false;
+        }
+      }
+    }
+
+    // Enable/disable confirm button based on checkbox
+    if (modalAgreeCheckbox && confirmAgreementBtn) {
+      modalAgreeCheckbox.addEventListener("change", function () {
+        confirmAgreementBtn.disabled = !this.checked;
+      });
+
+      // Confirm agreement and close modal
+      confirmAgreementBtn.addEventListener("click", function () {
+        if (modalAgreeCheckbox.checked) {
+          termsCheckbox.checked = true;
+          termsModal.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+    }
+  }
+
   // Password visibility toggle
   const toggleBtns = document.querySelectorAll(".password-toggle");
   toggleBtns.forEach((btn) => {
