@@ -1,10 +1,17 @@
-<h1>Notifications</h1>
-<ul>
-    {% for notification in notifications %}
-        <li>
-            {{ notification.timestamp }} - {{ notification.message }}
-        </li>
-    {% empty %}
-        <li>No notifications.</li>
-    {% endfor %}
-</ul>
+<h1>Login Access Requests</h1>
+
+{% for notif in notifications %}
+  <div style="margin-bottom: 1em;">
+    <p><strong>{{ notif.from_user.username }}</strong> requested access at {{ notif.created_at }}</p>
+    <p>{{ notif.message }}</p>
+
+    {% if notif.status == "pending" %}
+      <a href="{% url 'accept_notification' notif.id %}">Accept</a> |
+      <a href="{% url 'reject_notification' notif.id %}">Reject</a>
+    {% else %}
+      <p>Status: {{ notif.status|title }}</p>
+    {% endif %}
+  </div>
+{% empty %}
+  <p>No login access requests.</p>
+{% endfor %}

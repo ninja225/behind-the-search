@@ -7,8 +7,22 @@ User = get_user_model()
 
 @receiver(user_logged_in)
 def notify_superusers_on_login(sender, request, user, **kwargs):
-    message = f"{user.username} has logged in."
-    superusers = User.objects.filter(is_superuser=True)
+    if user.is_superuser or user.access:
+        return
 
+    existing_notification = Notification.objects.filter(
+        from_user=user,
+        status='pending'
+    ).exists()
+
+    if existing_notification:
+        return  
+
+    superusers = User.objects.filter(is_superuser=True)
     for superuser in superusers:
-        Notification.objects.create(recipient=superuser, message=message)
+        Notification.objects.create(
+            to_user=superuser,
+            from_user=user,
+            message=f"{user.username} has requested access.",
+            status="pending"
+        )
