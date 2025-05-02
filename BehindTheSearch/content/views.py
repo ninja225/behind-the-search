@@ -22,10 +22,10 @@ def create_course_video(request):
 
     return render(request, 'content/create_course_video.html', {'form': form})
 
-def video_description(request, video_id):
-    video = get_object_or_404(CourseVideo, id=video_id)
+#def video_description(request, video_id):
+    #video = get_object_or_404(CourseVideo, id=video_id)
     
-    return render(request, 'content/video_description.html', {'video': video})
+    #return render(request, 'content/video_description.html', {'video': video})
 
 
 def edit_course_video(request, video_id):
