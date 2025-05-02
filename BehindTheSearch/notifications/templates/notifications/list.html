@@ -1,17 +1,50 @@
-<h1>Login Access Requests</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifications</title>
+    <style>
+        form {
+            margin-bottom: 20px;
+        }
+        .notification {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .notification p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
 
-{% for notif in notifications %}
-  <div style="margin-bottom: 1em;">
-    <p><strong>{{ notif.from_user.username }}</strong> requested access at {{ notif.created_at }}</p>
-    <p>{{ notif.message }}</p>
+    <h1>Notifications</h1>
 
-    {% if notif.status == "pending" %}
-      <a href="{% url 'accept_notification' notif.id %}">Accept</a> |
-      <a href="{% url 'reject_notification' notif.id %}">Reject</a>
+    <!-- Search form -->
+    <form method="get" action="{% url 'notification_list' %}">
+        <input type="text" name="search" placeholder="Search by sender username" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    <!-- Notifications list -->
+    {% if notifications %}
+        {% for notification in notifications %}
+            <div class="notification">
+                <p><strong>From:</strong> {{ notification.sender.username }}</p>
+                <p>{{ notification.message }}</p>
+                <p><em>Sent at:</em> {{ notification.created_at }}</p>
+                {% if notification.status %}
+                    <p><strong>Status:</strong> {{ notification.status }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
     {% else %}
-      <p>Status: {{ notif.status|title }}</p>
+        <p>No notifications found.</p>
     {% endif %}
-  </div>
-{% empty %}
-  <p>No login access requests.</p>
-{% endfor %}
+
+</body>
+</html>
