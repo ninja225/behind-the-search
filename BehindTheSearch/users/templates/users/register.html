@@ -1,5 +1,6 @@
 {% load static %} {% block title %}التسجيل - Behind
 The Search{% endblock %} 
+{% block content %}
 <div class="auth">
     <div class="card">
       <div class="auth__header text-center">
@@ -33,3 +34,5 @@ The Search{% endblock %}
         <p>Already have an Account?</p>
         <a href="{% url "login" %}">Log In</a>
     </div> 
+
+    {% endblock content %}

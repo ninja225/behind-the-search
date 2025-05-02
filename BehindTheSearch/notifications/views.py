@@ -3,10 +3,7 @@ from django.contrib.auth.decorators import user_passes_test
 from .models import Notification
 from django.core.mail import send_mail
 from django.conf import settings
-
-def superuser_required(view_func):
-    return user_passes_test(lambda u: u.is_superuser)(view_func)
-
+from adminBoard.decorators import superuser_required
 @superuser_required
 def notification_list(request):
     notifications = request.user.notifications.all().order_by('-created_at')
