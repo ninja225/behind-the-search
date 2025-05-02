@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'phonenumber_field',
     'adminBoard.apps.AdminboardConfig',
+    'notification',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
