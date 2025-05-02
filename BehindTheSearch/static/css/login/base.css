@@ -92,12 +92,12 @@ input[type="password"] {
 }
 
 .input-container:focus-within {
-  border-color: var(--Primary);
-  box-shadow: 0 0 0 2px rgba(142, 0, 163, 0.1);
+  border-color: var(--Accent);
+  box-shadow: 0 0 0 2px rgba(149, 117, 211, 0.1);
 }
 
 .input-container i {
-  color: var(--Primary);
+  color: var(--Accent);
   font-size: 1rem;
   margin: 0 0.75rem;
   opacity: 0.8;
@@ -131,7 +131,7 @@ input[type="password"] {
 }
 
 .password-toggle:hover {
-  color: var(--Primary);
+  color: var(--Accent);
 }
 
 /* Form Options */
@@ -152,7 +152,7 @@ input[type="password"] {
 .remember-me input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--Primary);
+  accent-color: var(--Accent);
 }
 
 .remember-me label {
@@ -161,13 +161,13 @@ input[type="password"] {
 }
 
 .forgot-password {
-  color: var(--Primary);
+  color: var(--Accent);
   text-decoration: none;
   transition: color var(--Transition-Fast);
 }
 
 .forgot-password:hover {
-  color: var(--Primary-Light);
+  color: var(--Accent-Light);
   text-decoration: underline;
 }
 
@@ -184,7 +184,7 @@ input[type="password"] {
   font-weight: 600;
   font-size: 1rem;
   background: linear-gradient(90deg, var(--Primary), var(--Primary-Light));
-  color: var(--Text-Primary);
+  color: var(--Background);
   transition: all var(--Transition-Fast);
   cursor: pointer;
   width: 100%;
@@ -202,7 +202,7 @@ input[type="password"] {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transition: all 0.6s;
@@ -260,14 +260,14 @@ input[type="password"] {
 }
 
 .alternative-link {
-  color: var(--Primary);
+  color: var(--Accent);
   text-decoration: none;
   font-weight: 500;
   transition: color var(--Transition-Fast);
 }
 
 .alternative-link:hover {
-  color: var(--Primary-Light);
+  color: var(--Accent-Light);
   text-decoration: underline;
 }
 

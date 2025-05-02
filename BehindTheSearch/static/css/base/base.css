@@ -20,17 +20,17 @@ body {
   padding: 2rem 0;
 }
 
-/* Modern Header Styling with Glass Effect */
+/* Modern Header Styling with Enhanced Glassmorphism Effect */
 .site-header {
-  background-color: rgba(30, 30, 47, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(52, 52, 74, 0.3);
+  background-color: rgba(30, 30, 46, 0.65);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(149, 117, 211, 0.15);
   padding: 0.75rem 0;
   position: sticky;
   top: 0;
   z-index: 1020;
-  box-shadow: var(--Shadow-Medium);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   transition: all var(--Transition-Normal);
 }
 
@@ -41,15 +41,7 @@ body {
   left: 0;
   width: 100%;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--Accent) 20%,
-    var(--Primary) 50%,
-    var(--Accent) 80%,
-    transparent 100%
-  );
-  opacity: 0.7;
+  background-color: rgba(149, 117, 211, 0.25);
 }
 
 .main-nav {
@@ -78,7 +70,7 @@ body {
   transform: scale(1.05) rotate(-2deg);
 }
 
-/* Centered title with advanced gradient */
+/* Centered title with clean styling */
 .site-title {
   position: absolute;
   left: 50%;
@@ -88,48 +80,17 @@ body {
 
 .gradient-text {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0;
-  background: linear-gradient(
-    135deg,
-    var(--Accent-Light) 0%,
-    var(--Primary) 50%,
-    var(--Primary-Dark) 100%
-  );
-  background-size: 200% 200%;
-  animation: bganimate 8s ease infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--Text-Primary);
   position: relative;
   letter-spacing: 0.5px;
 }
 
-.gradient-text::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  background: linear-gradient(
-    135deg,
-    var(--Accent-Light) 0%,
-    var(--Primary) 50%,
-    var(--Primary-Dark) 100%
-  );
-  background-size: 200% 200%;
-  animation: bganimate 8s ease infinite;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: blur(8px);
-  opacity: 0.7;
-}
-
-/* Modern button-styled nav links */
+/* Clean, modern button-styled nav links */
 .nav-links {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
   z-index: 10;
 }
 
@@ -140,93 +101,66 @@ body {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.3px;
-  transition: all var(--Transition-Normal);
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   text-decoration: none;
   border: 1px solid transparent;
 }
 
 .btn-login {
   background-color: transparent;
-  border: 1px solid var(--Primary-Light);
+  border: 1px solid rgba(248, 249, 250, 0.3);
   color: var(--Text-Primary);
-  box-shadow: inset 0 0 0 0 var(--Primary);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-login:hover {
-  box-shadow: inset 0 -100px 0 0 var(--Primary);
-  border-color: var(--Primary);
+  background-color: rgba(248, 249, 250, 0.05);
+  border-color: rgba(248, 249, 250, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-login span {
   position: relative;
   z-index: 1;
   color: var(--Text-Primary);
-  transition: all 0.3s ease;
 }
 
 .btn-register {
-  background: linear-gradient(135deg, var(--Primary) 0%, var(--Accent) 100%);
-  background-size: 200% 200%;
-  animation: bganimate 5s ease infinite;
+  background-color: var(--Primary);
   border: none;
-  color: white;
-  position: relative;
-  box-shadow: 0 4px 15px rgba(142, 0, 163, 0.3);
-  transition: all 0.3s ease;
+  color: var(--Background);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
 }
 
 .btn-register:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(142, 0, 163, 0.5);
-}
-
-.btn-register::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--Primary) 0%, var(--Accent) 100%);
-  background-size: 200% 200%;
-  animation: bganimate 5s ease infinite;
-  border-radius: 8px;
-  z-index: -1;
-  transition: opacity 0.3s ease;
-  opacity: 0;
-}
-
-.btn-register:hover::before {
-  opacity: 1;
+  background-color: var(--Primary-Light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn-register span {
   position: relative;
   z-index: 1;
-  color: white;
+  color: var(--Background);
 }
 
 .btn-logout {
-  border: 1px solid #e35a91;
+  border: 1px solid rgba(227, 90, 145, 0.3);
   color: var(--Text-Primary);
   background: transparent;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-logout:hover {
-  background: linear-gradient(135deg, #e35a91 0%, #b91c1c 100%);
-  border-color: transparent;
-}
-
-.btn-logout span {
-  position: relative;
-  z-index: 1;
-  color: var(--Text-Primary);
+  background-color: rgba(227, 90, 145, 0.1);
+  border-color: rgba(227, 90, 145, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer styling */

@@ -167,20 +167,12 @@ spline-viewer {
 }
 
 .gradient-hero-text {
-  background: linear-gradient(90deg, var(--Primary), var(--Accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--Primary);
   display: inline-block;
-  animation: bganimate 6s ease infinite;
-  background-size: 200% 100%;
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, var(--Primary), var(--Accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--Text-Primary);
 }
 
 .hero-subtitle {

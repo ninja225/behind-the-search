@@ -1,6 +1,7 @@
 .vscode/*
 !.vscode/extensions.json
 .idea
+.qodo
 .DS_Store
 *.suo
 .ntvs
