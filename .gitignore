@@ -8,7 +8,8 @@
 *.sln
 *.sw?
 venv
-
+intro.mp4
+*.mp4
 # Python compiled files
 __pycache__/
 *.py[cod]
