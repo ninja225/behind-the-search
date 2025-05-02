@@ -6,13 +6,6 @@ Search{% endblock %} {% block extra_css %}
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
-        <div class="logo-container">
-          <img
-            src="{% static 'imgs/logo-trans.png' %}"
-            alt="Behind The Search Logo"
-            class="login-logo"
-          />
-        </div>
         <h2 class="login-title">Welcome Back</h2>
         <p class="login-subtitle">Sign in to continue your journey</p>
       </div>
@@ -80,10 +73,12 @@ Search{% endblock %} {% block extra_css %}
       </div>
 
       <div class="login-alternative">
-        <p>Don't have an account?</p>
-        <a href="{% url 'register' %}" class="alternative-link">
-          Create Account
-        </a>
+        <p>
+          Don't have an account?
+          <a href="{% url 'register' %}" class="alternative-link"
+            >Create Account</a
+          >
+        </p>
       </div>
     </div>
   </div>
