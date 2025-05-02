@@ -12,7 +12,10 @@ from django.http import FileResponse
 @login_required
 def stream_video(request, id):
     video = get_object_or_404(CourseVideo, id=id)
-    return FileResponse(video.video_file.open(), content_type='video/mp4')
+    try:
+        return FileResponse(video.video.open('rb'), content_type='video/mp4')
+    except FileNotFoundError:
+        raise Http404("Video not found.")
 
 
 
