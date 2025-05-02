@@ -3,6 +3,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import CourseVideo
 from .forms import CourseVideoForm
 from adminBoard.decorators import superuser_required
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse
+
+
+
+
+@login_required
+def stream_video(request, id):
+    video = get_object_or_404(CourseVideo, id=id)
+    return FileResponse(video.video_file.open(), content_type='video/mp4')
+
+
+
+
 def video_list(request):
     videos = CourseVideo.objects.all()
     return render(request, 'content/video_list.html', {'videos': videos})
@@ -23,10 +37,10 @@ def create_course_video(request):
 
     return render(request, 'content/create_course_video.html', {'form': form})
 
-# def video_description(request, video_id):
-#     video = get_object_or_404(CourseVideo, id=video_id)
+#def video_description(request, video_id):
+    #video = get_object_or_404(CourseVideo, id=video_id)
     
-#     return render(request, 'content/video_description.html', {'video': video})
+    #return render(request, 'content/video_description.html', {'video': video})
 
 @superuser_required
 def edit_course_video(request, video_id):

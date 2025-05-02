@@ -1,10 +1,12 @@
 <!-- content/templates/content/video_detail.html -->
 
 <h1>{{ video.title }}</h1>
-<video width="600" controls>
-    <source src="{{ video.video.url }}" type="video/mp4">
+
+<video width="600" controls oncontextmenu="return false;">
+    <source src="{% url 'stream_video' video.id %}" type="video/mp4">
     Your browser does not support the video tag.
 </video>
+
 <p>{{ video.description }}</p>
 
 <!-- Example: Display watch status -->
