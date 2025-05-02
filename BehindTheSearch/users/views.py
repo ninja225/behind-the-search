@@ -43,3 +43,5 @@ def logoutUser(request):
 
 def landingPage(request):
     return render(request,'landing-p.html')
+
+
