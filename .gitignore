@@ -14,3 +14,9 @@ __pycache__/
 *.py[cod]
 *.pyc
 
+# Media files
+*.mp4
+BehindTheSearch/static/media/
+media/
+intro.mp4
+
