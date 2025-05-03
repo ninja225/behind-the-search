@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import CourseVideo
 from .forms import CourseVideoForm
-from adminBoard.decorators import superuser_required
+from adminBoard.decorators import superuser_required, access_required
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 # {Ai -Ninja} This view is used to stream the video content
@@ -11,6 +11,7 @@ import json
 
 
 @login_required
+@access_required
 def stream_video(request, id):
     video = get_object_or_404(CourseVideo, id=id)
     try:
@@ -19,6 +20,8 @@ def stream_video(request, id):
         raise Http404("Video not found.")
 
 
+@login_required
+@access_required
 def video_list(request):
     videos = CourseVideo.objects.all().order_by('lesson_number')
 
@@ -32,9 +35,9 @@ def video_list(request):
     }
     return render(request, 'content/video_list.html', context)
 
-# This view is used to display the details of a specific video {Ai -Ninja}
 
-
+@login_required
+@access_required
 def video_detail(request, id):
     video = get_object_or_404(CourseVideo, id=id)
 
@@ -84,6 +87,14 @@ def edit_course_video(request, video_id):
         form = CourseVideoForm(instance=video)
 
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
+
+
+@login_required
+@access_required
+def delete_course_video(request, video_id):
+    video = get_object_or_404(CourseVideo, id=video_id)
+    video.delete()
+    return redirect('video_list')
 
 # This view is used to mark a video as watched or unwatched {Ai -Ninja}
 
