@@ -61,26 +61,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Check for Django messages and convert to toast notifications
-  const messages = document.querySelectorAll(".messages .message");
-  if (messages.length > 0) {
-    messages.forEach((message) => {
-      const messageText = message.textContent.trim();
-      const messageType = message.classList.contains("message-error")
-        ? "error"
-        : message.classList.contains("message-success")
-        ? "success"
-        : message.classList.contains("message-warning")
-        ? "warning"
-        : "info";
-
-      // Display toast notification
-      showToast("Notification", messageText, messageType, 5000);
-
-      // Remove the original message elements
-      message.remove();
-    });
-  }
+  // Process Django messages - Make sure DOM is fully loaded
+  // Use a small delay to ensure toast library is ready
+  setTimeout(processMessages, 100);
 
   // Handle input events to remove error state
   document.querySelectorAll("input").forEach((input) => {
@@ -101,12 +84,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // If just one error, show it directly
     if (errors.length === 1) {
-      showToast("Validation Error", errors[0], "error", 5000);
+      showToastWhenReady("Validation Error", errors[0], "error", 5000);
       return;
     }
 
     // Format multiple errors as a list
     const errorsList = errors.map((error) => `• ${error}`).join("<br>");
-    showToast("Please Fix These Errors", errorsList, "error", 7000);
+    showToastWhenReady("Please Fix These Errors", errorsList, "error", 7000);
+  }
+
+  // Helper function to show toast only when DOM is ready
+  function showToastWhenReady(title, message, type, timeout) {
+    if (document.readyState === "complete") {
+      showToast(title, message, type, timeout);
+    } else {
+      setTimeout(function () {
+        showToast(title, message, type, timeout);
+      }, 200);
+    }
+  }
+
+  // Helper function to process Django messages
+  function processMessages() {
+    const messages = document.querySelectorAll(".messages .message");
+    if (messages.length > 0) {
+      messages.forEach((message) => {
+        const messageText = message.textContent.trim();
+        const messageType = message.classList.contains("message-error")
+          ? "error"
+          : message.classList.contains("message-success")
+          ? "success"
+          : message.classList.contains("message-warning")
+          ? "warning"
+          : "info";
+
+        // Display toast notification with delay to ensure DOM is ready
+        showToastWhenReady(
+          "Authentication Error",
+          messageText,
+          messageType,
+          5000
+        );
+
+        // Remove the original message elements
+        message.remove();
+      });
+
+      // Remove the empty messages container
+      const messagesContainer = document.querySelector(".messages");
+      if (messagesContainer) {
+        messagesContainer.remove();
+      }
+    }
   }
 });
