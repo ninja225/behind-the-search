@@ -20,7 +20,10 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('landing-page')
+            if user.access == False:
+                return redirect('waiting-page')
+            else:
+                return redirect('video_list')
         else:
             messages.error(request, "Username or Password is incorrect")
 
