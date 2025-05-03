@@ -15,7 +15,7 @@ Search{% endblock %} {% block extra_css %}
         method="post"
         class="login-form"
         id="login-form"
-        novalidate
+        {% comment %} novalidate {% endcomment %}
       >
         {% csrf_token %}
 
