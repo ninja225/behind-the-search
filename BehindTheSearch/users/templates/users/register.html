@@ -25,7 +25,7 @@ The Search{% endblock %} {% block extra_css %}
 
       <!-- for test the toast no validate from the backend -->
       <form
-        action=""
+        action="{% url "register" %}"
         method="post"
         class="register-form"
         id="register-form"
