@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 import json
 
 
-@login_required
+
 @access_required
 def stream_video(request, id):
     video = get_object_or_404(CourseVideo, id=id)
@@ -20,7 +20,7 @@ def stream_video(request, id):
         raise Http404("Video not found.")
 
 
-@login_required
+
 @access_required
 def video_list(request):
     videos = CourseVideo.objects.all().order_by('lesson_number')
@@ -36,7 +36,7 @@ def video_list(request):
     return render(request, 'content/video_list.html', context)
 
 
-@login_required
+
 @access_required
 def video_detail(request, id):
     video = get_object_or_404(CourseVideo, id=id)
@@ -89,7 +89,7 @@ def edit_course_video(request, video_id):
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
 
 
-@login_required
+
 @access_required
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
@@ -99,7 +99,7 @@ def delete_course_video(request, video_id):
 # This view is used to mark a video as watched or unwatched {Ai -Ninja}
 
 
-@login_required
+@access_required
 @require_POST
 def mark_video_watched(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
