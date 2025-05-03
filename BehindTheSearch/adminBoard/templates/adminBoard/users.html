@@ -1,3 +1,10 @@
+
+<form method="get" action="{% url 'users' %}">
+    <input type="text" name="search_query" placeholder="Search by sender username" value="{{ search_query }}">
+    <button type="submit">Search</button>
+</form>
+
+
 {% for user in users %}
     <a href="{% url 'user' user.id %}">{{ user.username }}</a>
 {% endfor %}

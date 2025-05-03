@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .decorators import superuser_required
 from users.models import CustomUser
-
+from .utils import searchusers
 
 @superuser_required
 def dashboard(request):
@@ -10,7 +10,8 @@ def dashboard(request):
 @superuser_required
 def getUsers(request):
     users = CustomUser.objects.filter(access=True,is_superuser=False)
-    context = {'users':users}
+    users, search_query = searchusers(request)
+    context = {'users':users,'search_query':search_query}
     return render(request, 'adminBoard/users.html',context)
 
 @superuser_required

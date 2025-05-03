@@ -5,6 +5,7 @@ from .forms import CourseVideoForm
 from adminBoard.decorators import superuser_required
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
+from django.http import Http404
 
 
 
