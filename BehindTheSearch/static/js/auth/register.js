@@ -489,6 +489,48 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
+    // Get form values to compare with password
+    const emailField = document.getElementById("id_email");
+    const firstNameField = document.getElementById("id_first_name");
+    const usernameField = document.getElementById("id_username");
+
+    // Check if password contains email, username, or name (case insensitive)
+    if (emailField && emailField.value) {
+      // Get username part of email (before @)
+      const emailUsername = emailField.value.split("@")[0].toLowerCase();
+      const emailDomain = emailField.value.split("@")[1]?.toLowerCase();
+
+      // Check if password contains email or parts of it
+      if (
+        password.toLowerCase() === emailField.value.toLowerCase() ||
+        password.toLowerCase().includes(emailUsername) ||
+        (emailDomain &&
+          password.toLowerCase().includes(emailDomain.split(".")[0]))
+      ) {
+        return false;
+      }
+    }
+
+    // Check if password is same as or contains first name
+    if (
+      firstNameField &&
+      firstNameField.value &&
+      firstNameField.value.length > 2 &&
+      password.toLowerCase().includes(firstNameField.value.toLowerCase())
+    ) {
+      return false;
+    }
+
+    // Check if password is same as or contains username
+    if (
+      usernameField &&
+      usernameField.value &&
+      usernameField.value.length > 2 &&
+      password.toLowerCase().includes(usernameField.value.toLowerCase())
+    ) {
+      return false;
+    }
+
     return true;
   }
 
