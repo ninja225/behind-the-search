@@ -5,7 +5,10 @@ from django.contrib import messages
 from . models import CustomUser
 def loginUser(request):
     if request.user.is_authenticated:
-        return redirect('landing-page')
+        if request.user.access == False:
+            return redirect('waiting-page')
+        else :
+            return redirect('video_list')
 
     if request.method == 'POST':
         username = request.POST['username'].lower()
@@ -30,6 +33,11 @@ def loginUser(request):
     return render(request, 'users/login.html')
 
 def registerUser(request):
+    if request.user.is_authenticated:
+        if request.user.access == False:
+            return redirect('waiting-page')
+        else :
+            return redirect('video_list')
     form = CustomUserCreationForm()
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -48,6 +56,11 @@ def landingPage(request):
     return render(request,'landing-p.html')
 
 def waitingPage(request):
+    if request.user.is_authenticated:
+        if request.user.access == True:
+            return redirect('video_list')
+
     return render(request,'waiting-p.html')
+
 
 
