@@ -14,7 +14,7 @@ def notification_list(request):
     notifications = Notification.objects.all().order_by('-created_at')
 
     if search_query:
-        notifications = notifications.filter(from_user__username__icontains=search_query)
+        notifications = notifications.filter(from_user__username__icontains=search_query).order_by('-created_at')
 
     return render(request, 'notifications/list.html', {
         'notifications': notifications,

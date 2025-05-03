@@ -22,8 +22,17 @@ def stream_video(request, id):
 
 
 def video_list(request):
-    videos = CourseVideo.objects.all()
-    return render(request, 'content/video_list.html', {'videos': videos})
+    videos = CourseVideo.objects.all().order_by('lesson_number')
+
+    query = request.GET.get('search', '')
+    if query:
+        videos = videos.filter(title__icontains=query).order_by('lesson_number')
+    context = {
+        'videos': videos,
+        'query': query,
+    }
+    return render(request, 'content/video_list.html', context)
+
 
 def video_detail(request, id):
     video = get_object_or_404(CourseVideo, id=id) 
