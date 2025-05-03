@@ -55,6 +55,7 @@ def logoutUser(request):
 def landingPage(request):
     return render(request,'landing-p.html')
 
+
 def waitingPage(request):
     if request.user.is_authenticated:
         if request.user.access == True:
