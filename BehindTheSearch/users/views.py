@@ -20,10 +20,7 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.access == False:
-                return redirect('waiting-page')
-            else:
-                return redirect('landing-page')
+            return redirect('landing-page')
         else:
             messages.error(request, "Username or Password is incorrect")
 
@@ -37,7 +34,6 @@ def registerUser(request):
             user = form.save(commit = False)
             user.username = user.username.lower()
             user.save()
-            return redirect('login')
     context = {'form':form}
     return render (request,'users/register.html',context)
 
@@ -50,3 +46,5 @@ def landingPage(request):
 
 def waitingPage(request):
     return render(request,'waiting-p.html')
+
+
