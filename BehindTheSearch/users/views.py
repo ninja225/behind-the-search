@@ -37,7 +37,6 @@ def registerUser(request):
             user = form.save(commit = False)
             user.username = user.username.lower()
             user.save()
-            return redirect('login')
     context = {'form':form}
     return render (request,'users/register.html',context)
 
@@ -50,3 +49,5 @@ def landingPage(request):
 
 def waitingPage(request):
     return render(request,'waiting-p.html')
+
+
