@@ -97,7 +97,7 @@ input[type="password"] {
 }
 
 .input-container i {
-  color: var(--Accent);
+  color: #1e88e5; /* Blue color instead of var(--Accent) */
   font-size: 1rem;
   margin: 0 0.75rem;
   opacity: 0.8;
@@ -131,7 +131,7 @@ input[type="password"] {
 }
 
 .password-toggle:hover {
-  color: var(--Accent);
+  color: #1e88e5; /* Blue color for hover state instead of var(--Accent) */
 }
 
 /* Form Options */
@@ -152,7 +152,7 @@ input[type="password"] {
 .remember-me input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--Accent);
+  accent-color: #1e88e5; /* Blue color for checkbox instead of var(--Accent) */
 }
 
 .remember-me label {
@@ -161,13 +161,13 @@ input[type="password"] {
 }
 
 .forgot-password {
-  color: var(--Accent);
+  color: #1e88e5; /* Blue color instead of var(--Accent) */
   text-decoration: none;
   transition: color var(--Transition-Fast);
 }
 
 .forgot-password:hover {
-  color: var(--Accent-Light);
+  color: #42a5f5; /* Lighter blue for hover instead of var(--Accent-Light) */
   text-decoration: underline;
 }
 
@@ -260,14 +260,14 @@ input[type="password"] {
 }
 
 .alternative-link {
-  color: var(--Accent);
+  color: #1e88e5; /* Blue color instead of var(--Accent) */
   text-decoration: none;
   font-weight: 500;
   transition: color var(--Transition-Fast);
 }
 
 .alternative-link:hover {
-  color: var(--Accent-Light);
+  color: #42a5f5; /* Lighter blue for hover instead of var(--Accent-Light) */
   text-decoration: underline;
 }
 
