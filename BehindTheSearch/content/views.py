@@ -1,23 +1,34 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import Http404, JsonResponse, StreamingHttpResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 from .models import CourseVideo
 from .forms import CourseVideoForm
-from adminBoard.decorators import superuser_required, access_required
-from django.contrib.auth.decorators import login_required
-from django.http import Http404
-# {Ai -Ninja} This view is used to stream the video content
-from django.http import FileResponse, JsonResponse
-from django.views.decorators.http import require_POST
-import json
+from .utils.encryption import encrypt_video, decrypt_video
 
+from adminBoard.decorators import superuser_required, access_required
+
+import json
+import io
 
 
 @access_required
 def stream_video(request, id):
     video = get_object_or_404(CourseVideo, id=id)
+
     try:
-        return FileResponse(video.video.open('rb'), content_type='video/mp4')
-    except FileNotFoundError:
-        raise Http404("Video not found.")
+        decrypted_data = decrypt_video(video.video.path)
+
+        return StreamingHttpResponse(
+            io.BytesIO(decrypted_data),
+            content_type='video/mp4'
+        )
+    except Exception as e:
+        return HttpResponse(f"Error decrypting video: {e}", status=500)
+
+
 
 
 
@@ -61,7 +72,13 @@ def create_course_video(request):
     if request.method == 'POST':
         form = CourseVideoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            video_instance = form.save()
+            
+            # Encrypt the saved video
+            input_path = video_instance.video.path
+            encrypted_path = input_path  # overwrite same file
+            encrypt_video(input_path, encrypted_path)
+
             return redirect('video_list')
     else:
         form = CourseVideoForm()

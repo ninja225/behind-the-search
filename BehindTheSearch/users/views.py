@@ -45,8 +45,8 @@ def registerUser(request):
             user = form.save(commit = False)
             user.username = user.username.lower()
             user.save()
+            return redirect('login')
     context = {'form':form}
-    return redirect('login')
     return render (request,'users/register.html',context)
 
 def logoutUser(request):
