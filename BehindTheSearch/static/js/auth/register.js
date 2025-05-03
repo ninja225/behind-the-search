@@ -8,6 +8,63 @@ document.addEventListener("DOMContentLoaded", function () {
   const registerButton = document.querySelector(".register-button");
   const strengthProgress = document.querySelector(".strength-progress");
   const termsCheckbox = document.getElementById("terms");
+  const phoneInput = document.getElementById("id_phone_number");
+
+  // Add phone number helper text and format guidance
+  if (phoneInput) {
+    // Add placeholder with format example if not already set
+    if (
+      !phoneInput.getAttribute("placeholder") ||
+      phoneInput.getAttribute("placeholder") === "Phone Number"
+    ) {
+      phoneInput.setAttribute(
+        "placeholder",
+        "Phone Number (e.g., +201234567890)"
+      );
+    }
+
+    // Add input event listener for phone formatting
+    phoneInput.addEventListener("input", function (e) {
+      let value = e.target.value.trim();
+
+      // If user is starting to type and hasn't added +20, help them out
+      if (value && !value.startsWith("+") && !value.startsWith("00")) {
+        if (value.startsWith("20")) {
+          // If they typed 20 without +, add the +
+          e.target.value = "+" + value;
+        } else if (!isNaN(value) && value.length > 0) {
+          // If they started with just numbers, assume Egyptian number
+          e.target.value = "+20" + value;
+        }
+      }
+
+      // Replace 00 at start with + for international format
+      if (value.startsWith("00")) {
+        e.target.value = "+" + value.substring(2);
+      }
+    });
+
+    // Add blur event to validate phone number format
+    phoneInput.addEventListener("blur", function () {
+      const value = this.value.trim();
+      const container = this.closest(".input-container");
+
+      // Basic validation for phone number format
+      if (value && !isValidPhoneNumber(value)) {
+        if (container) {
+          container.classList.add("error");
+
+          // Show specific toast for phone number format
+          showToastWhenReady(
+            "Invalid Phone Format",
+            "Please enter a valid phone number with country code (e.g., +201234567890)",
+            "error",
+            5000
+          );
+        }
+      }
+    });
+  }
 
   // Terms modal elements
   const termsModal = document.getElementById("termsModal");
@@ -240,6 +297,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
+      // Phone number validation
+      const phoneNumber = formData.get("phone_number")?.trim();
+      if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+        const field = registerForm.querySelector(`[name="phone_number"]`);
+        if (field) {
+          highlightErrorField(field);
+          errors.push(
+            "Please enter a valid phone number with country code (e.g., +201234567890)"
+          );
+          isValid = false;
+        }
+      }
+
       // Validate terms checkbox
       if (termsCheckbox && !termsCheckbox.checked) {
         const container = termsCheckbox.closest(".checkbox-field");
@@ -269,6 +339,15 @@ document.addEventListener("DOMContentLoaded", function () {
           errors.push("Password is too weak");
           isValid = false;
         }
+
+        // Validate password complexity
+        if (!isPasswordComplex(passwordInput.value)) {
+          highlightErrorField(passwordInput);
+          errors.push(
+            "Password must contain at least one letter and cannot be only numbers"
+          );
+          isValid = false;
+        }
       }
 
       // Show consolidated errors if any
@@ -288,36 +367,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Check for Django messages and convert to toast notifications
-  const messages = document.querySelectorAll(".messages .message");
-  if (messages.length > 0) {
-    messages.forEach((message) => {
-      const messageText = message.textContent.trim();
-      const messageType = message.classList.contains("message-error")
-        ? "error"
-        : message.classList.contains("message-success")
-        ? "success"
-        : message.classList.contains("message-warning")
-        ? "warning"
-        : "info";
-
-      // Display toast notification
-      showToast("Notification", messageText, messageType, 5000);
-
-      // Remove the original message elements
-      message.remove();
-    });
-  }
-
-  // Handle Django form errors
-  const formErrors = document.querySelectorAll(".errorlist li");
-  if (formErrors.length > 0) {
-    let backendErrors = [];
-    formErrors.forEach((error) => {
-      backendErrors.push(error.textContent.trim());
-    });
-    showValidationErrors(backendErrors);
-  }
+  // Process Django messages - Make sure DOM is fully loaded
+  // Use a small delay to ensure toast library is ready
+  setTimeout(processMessages, 100);
 
   // Handle input events to remove error state
   document.querySelectorAll("input").forEach((input) => {
@@ -345,13 +397,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // If just one error, show it directly
     if (errors.length === 1) {
-      showToast("Validation Error", errors[0], "error", 5000);
+      showToastWhenReady("Validation Error", errors[0], "error", 5000);
       return;
     }
 
     // Format multiple errors as a list
     const errorsList = errors.map((error) => `• ${error}`).join("<br>");
-    showToast("Please Fix These Errors", errorsList, "error", 7000);
+    showToastWhenReady("Please Fix These Errors", errorsList, "error", 7000);
+  }
+
+  // Helper function to show toast only when DOM is ready
+  function showToastWhenReady(title, message, type, timeout) {
+    if (document.readyState === "complete") {
+      showToast(title, message, type, timeout);
+    } else {
+      setTimeout(function () {
+        showToast(title, message, type, timeout);
+      }, 200);
+    }
+  }
+
+  // Helper function to process Django messages
+  function processMessages() {
+    const messages = document.querySelectorAll(".messages .message");
+    if (messages.length > 0) {
+      messages.forEach((message) => {
+        const messageText = message.textContent.trim();
+        const messageType = message.classList.contains("message-error")
+          ? "error"
+          : message.classList.contains("message-success")
+          ? "success"
+          : message.classList.contains("message-warning")
+          ? "warning"
+          : "info";
+
+        // Display toast notification with delay to ensure DOM is ready
+        showToastWhenReady(
+          "Registration Error",
+          messageText,
+          messageType,
+          5000
+        );
+
+        // Remove the original message elements
+        message.remove();
+      });
+
+      // Remove the empty messages container
+      const messagesContainer = document.querySelector(".messages");
+      if (messagesContainer) {
+        messagesContainer.remove();
+      }
+    }
   }
 
   // Helper function to calculate password strength
@@ -366,7 +463,33 @@ document.addEventListener("DOMContentLoaded", function () {
     if (/[0-9]/.test(password)) strength += 25; // Numbers
     if (/[^A-Za-z0-9]/.test(password)) strength += 25; // Special characters
 
+    // Check if password is only numbers
+    if (/^\d+$/.test(password)) {
+      // Reset strength to very weak if only numbers
+      strength = 10;
+    }
+
     return strength;
+  }
+
+  // Helper function to validate password complexity
+  function isPasswordComplex(password) {
+    // Password should not be only numbers
+    if (/^\d+$/.test(password)) {
+      return false;
+    }
+
+    // Password should have at least 8 characters
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Password should have at least one letter
+    if (!/[a-zA-Z]/.test(password)) {
+      return false;
+    }
+
+    return true;
   }
 
   // Helper function to update password strength meter
@@ -384,5 +507,23 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       strengthProgress.style.backgroundColor = "var(--Success)";
     }
+  }
+
+  // Helper function to validate phone number format
+  function isValidPhoneNumber(phone) {
+    // Basic regex for international phone format
+    // Requires + followed by at least 7 digits
+    // This is a simple validation - the server will do full validation
+    const phoneRegex = /^\+\d{7,15}$/;
+
+    // Check if it's a valid Egyptian number starting with +20
+    if (phone.startsWith("+20")) {
+      // Egyptian numbers should have +20 followed by 10 digits
+      // Total length should be 13 (+20 plus 10 digits)
+      return phone.length === 13 && phoneRegex.test(phone);
+    }
+
+    // For other international numbers, just check the basic format
+    return phoneRegex.test(phone);
   }
 });
