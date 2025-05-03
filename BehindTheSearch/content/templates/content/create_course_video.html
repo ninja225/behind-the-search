@@ -1,10 +1,28 @@
-<!-- content/templates/content/create_course_video.html -->
-
 <h1>Create a New Course Video</h1>
 
-<form method="POST" enctype="multipart/form-data">  <!-- enctype required for file uploads -->
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}  <!-- Render the form fields -->
+    
+    <p>
+        <label for="{{ form.title.id_for_label }}">Title:</label>
+        {{ form.title }}
+    </p>
+    
+    <p>
+        <label for="{{ form.lesson_number.id_for_label }}">Lesson Number:</label>
+        {{ form.lesson_number }}
+    </p>
+    
+    <p>
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.description }}
+    </p>
+    
+    <p>
+        <label for="{{ form.video.id_for_label }}">Upload Video:</label>
+        {{ form.video }}
+    </p>
+    
     <button type="submit">Save Video</button>
 </form>
 

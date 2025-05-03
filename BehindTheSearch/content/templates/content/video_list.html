@@ -2,11 +2,18 @@
 
 <h1>All Course Videos</h1>
 
+<form method="get">
+    <input type="text" name="search" placeholder="Search by title..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
 <ul>
     {% for video in videos %}
         <li>
             <a href="{% url 'video_detail' video.id %}">{{ video.title }}</a>
             <p>{{ video.description|truncatewords:20 }}</p>
         </li>
+    {% empty %}
+        <li>No videos found.</li>
     {% endfor %}
 </ul>
