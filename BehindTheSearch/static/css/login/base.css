@@ -134,6 +134,16 @@ input[type="password"] {
   color: #1e88e5; /* Blue color for hover state instead of var(--Accent) */
 }
 
+/* Error styles for form validation */
+.input-container.error {
+  border-color: #f44336; /* Red color for error */
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1);
+}
+
+.input-container.error i {
+  color: #f44336; /* Red color for error icon */
+}
+
 /* Form Options */
 .form-options {
   display: flex;
@@ -269,6 +279,16 @@ input[type="password"] {
 .alternative-link:hover {
   color: #42a5f5; /* Lighter blue for hover instead of var(--Accent-Light) */
   text-decoration: underline;
+}
+
+/* Error message styling for Django messages */
+.messages {
+  display: none; /* Hide the container as we'll show toasts instead */
+}
+
+/* Toast customization */
+.vanillatoasts-toast {
+  z-index: 9999; /* Ensure toasts are always on top */
 }
 
 /* Responsive Styles */

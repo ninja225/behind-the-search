@@ -28,6 +28,7 @@ The Search{% endblock %} {% block extra_css %}
                 name="{{ form.username.html_name }}"
                 id="{{ form.username.id_for_label }}"
                 placeholder="Username"
+                autocomplete="username"
                 required
                 {%
                 if
@@ -135,6 +136,7 @@ The Search{% endblock %} {% block extra_css %}
                 name="{{ form.password1.html_name }}"
                 id="{{ form.password1.id_for_label }}"
                 placeholder="Password"
+                autocomplete="new-password"
                 required
               />
               <button
@@ -163,6 +165,7 @@ The Search{% endblock %} {% block extra_css %}
                 name="{{ form.password2.html_name }}"
                 id="{{ form.password2.id_for_label }}"
                 placeholder="Confirm Password"
+                autocomplete="new-password"
                 required
               />
               <button
