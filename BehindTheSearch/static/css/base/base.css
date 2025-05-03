@@ -138,7 +138,7 @@ body {
 }
 
 .btn-register:hover {
-  background-color: var(--Primary-Light);
+  background-color: #1565c0; /* Dark blue color instead of var(--Primary-Light) */
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
