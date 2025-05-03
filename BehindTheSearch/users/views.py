@@ -56,12 +56,11 @@ def logoutUser(request):
 def landingPage(request):
     return render(request,'landing-p.html')
 
+
 def waitingPage(request):
     if request.user.is_authenticated:
         if request.user.access == True:
             return redirect('video_list')
 
     return render(request,'waiting-p.html')
-
-
 
