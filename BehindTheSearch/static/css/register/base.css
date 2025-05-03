@@ -94,6 +94,23 @@
   opacity: 0.8;
 }
 
+/* Phone number hint text */
+.phone-hint {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--Text-Secondary);
+  padding-left: 0.5rem;
+}
+
+.phone-hint code {
+  background: rgba(30, 136, 229, 0.1);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  color: #1e88e5;
+  font-size: 0.75rem;
+}
+
 .input-container input {
   flex: 1;
   padding: 0.65rem 0.75rem 0.65rem 0;
@@ -527,6 +544,30 @@ input[type="password"] {
   to {
     opacity: 1;
   }
+}
+
+/* Error styles for form validation */
+.input-container.error {
+  border-color: #f44336; /* Red color for error */
+  box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1);
+}
+
+.input-container.error i {
+  color: #f44336; /* Red color for error icon */
+}
+
+.checkbox-field.error label {
+  color: #f44336; /* Red color for checkbox label error */
+}
+
+/* Error message styling for Django messages */
+.messages {
+  display: none; /* Hide the container as we'll show toasts instead */
+}
+
+/* Toast customization */
+.vanillatoasts-toast {
+  z-index: 9999; /* Ensure toasts are always on top */
 }
 
 /* Responsive Styles */
