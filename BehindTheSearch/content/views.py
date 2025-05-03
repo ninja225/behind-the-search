@@ -68,3 +68,8 @@ def edit_course_video(request, video_id):
         form = CourseVideoForm(instance=video)
     
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
+
+def delete_course_video(request, video_id):
+    video = get_object_or_404(CourseVideo, id=video_id)
+    video.delete()
+    return redirect('video_list')
