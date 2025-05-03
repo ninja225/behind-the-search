@@ -1,29 +1,102 @@
-<h1>Edit Video: {{ video.title }}</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    <p>
-        <label for="id_title">Title:</label>
-        {{ form.title }}
-    </p>
+{% block title %}Edit Video: {{ video.title }} - Behind The Search{% endblock %}
 
-    <p>
-        <label for="id_description">Description:</label>
-        {{ form.description }}
-    </p>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/content/video-create.css' %}" />
+<link rel="stylesheet" href="{% static 'css/content/edit-video.css' %}" />
+<!-- Include Quill.js CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+{% endblock %}
 
-    <p>
-        <label for="id_video">Upload Video:</label>
-        {{ form.video }}
-    </p>
+{% block content %}
+<div class="video-edit-container">
+  <div class="video-create-container">
+    <div class="video-create-header">
+      <h1 class="truncated-title" title="{{ video.title }}">Edit Video</h1>
+      <a href="{% url 'video_list' %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to List
+      </a>
+    </div>
 
-    <p>
-        <label for="id_lesson_number">Lesson Number:</label>
-        {{ form.lesson_number }}
-    </p>
+    <div class="video-create-content">
+      <form method="POST" enctype="multipart/form-data" id="video-form">
+        {% csrf_token %}
 
-    <button type="submit">Save Changes</button>
-</form>
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}">Video Title</label>
+          {{ form.title }}
+          <div class="form-help">Clear, descriptive title for your lesson</div>
+        </div>
 
-<a href="{% url 'video_list' %}">Back to video list</a>
+        <div class="form-group">
+          <label for="{{ form.lesson_number.id_for_label }}">Lesson Number</label>
+          {{ form.lesson_number }}
+          <div class="form-help">Lesson order in the course</div>
+        </div>
+
+        <div class="form-group description-group">
+          <label for="{{ form.description.id_for_label }}">Description</label>
+          <div id="description-editor"></div>
+          {{ form.description.as_hidden }}
+          <div class="form-help">What this lesson covers</div>
+        </div>
+
+        <div class="form-group upload-group">
+          <label for="{{ form.video.id_for_label }}">Upload Video</label>
+          <div class="video-upload-container">
+            <div class="upload-preview">
+              <i class="fas fa-file-video"></i>
+              <span id="file-name">{% if video.video %}{{ video.video.name|slice:"7:" }}{% else %}No file selected{% endif %}</span>
+            </div>
+            <label class="upload-button">
+              <i class="fas fa-cloud-upload-alt"></i> Change
+              <span class="visually-hidden">{{ form.video }}</span>
+            </label>
+          </div>
+          <div class="form-help">MP4 file (max: 500MB). Leave empty to keep current video.</div>
+          <div id="upload-progress" class="upload-progress">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="deleteButton" class="delete-button">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+          <button type="submit" class="save-button">
+            <i class="fas fa-save"></i> Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h3>Confirm Deletion</h3>
+    </div>
+    <div class="modal-content">
+      <p>Are you sure you want to delete <strong title="{{ video.title }}">"{{ video.title }}"</strong>?</p>
+      <p>This action cannot be undone and all associated data will be removed.</p>
+    </div>
+    <div class="modal-actions">
+      <button id="cancelDelete" class="cancel-button">Cancel</button>
+      <a href="{% url 'delete_course_video' video.id %}" class="delete-confirm-button">
+        <i class="fas fa-trash-alt"></i> Delete
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include Quill.js JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="{% static 'js/content/video-edit.js' %}"></script>
+{% endblock %}
