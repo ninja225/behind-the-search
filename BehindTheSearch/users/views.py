@@ -45,8 +45,9 @@ def registerUser(request):
             user = form.save(commit = False)
             user.username = user.username.lower()
             user.save()
+            return redirect('login')
     context = {'form':form}
-    return redirect('login')
+    
     return render (request,'users/register.html',context)
 
 def logoutUser(request):
@@ -56,12 +57,11 @@ def logoutUser(request):
 def landingPage(request):
     return render(request,'landing-p.html')
 
+
 def waitingPage(request):
     if request.user.is_authenticated:
         if request.user.access == True:
             return redirect('video_list')
 
     return render(request,'waiting-p.html')
-
-
 
