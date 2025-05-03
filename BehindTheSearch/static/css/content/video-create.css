@@ -14,22 +14,25 @@
 }
 
 .video-create-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .video-create-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--Border);
 }
 
 .video-create-header h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--Text-Primary);
   margin: 0;
@@ -39,13 +42,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   background-color: var(--Surface);
   border: 1px solid var(--Border);
   border-radius: 6px;
   color: var(--Text-Primary);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all var(--Transition-Fast);
 }
@@ -60,29 +63,38 @@
   background-color: var(--Surface);
   border-radius: 12px;
   box-shadow: var(--Shadow-Medium);
-  padding: 2rem;
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#video-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Form styles */
 .form-group {
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: var(--Text-Primary);
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .form-group input[type="text"],
 .form-group input[type="number"] {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 0.9rem;
   border: 1px solid var(--Border);
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--Text-Primary);
   background-color: var(--Background);
   transition: all var(--Transition-Fast);
@@ -96,28 +108,32 @@
 }
 
 .form-help {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--Text-Secondary);
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
 }
 
 /* Description editor styles */
 .description-group {
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 #description-editor {
-  height: 250px;
+  height: 200px;
   background-color: var(--Background);
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  flex-grow: 1;
 }
 
 .ql-toolbar.ql-snow {
   border: 1px solid var(--Border) !important;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  padding: 0.6rem !important;
+  padding: 0.5rem !important;
   background-color: var(--Surface);
 }
 
@@ -130,12 +146,12 @@
 }
 
 .ql-editor {
-  min-height: 200px;
-  padding: 1rem !important;
+  min-height: 150px;
+  padding: 0.8rem !important;
 }
 
 .ql-editor p {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.6rem;
 }
 
 /* Hide the original textarea */
@@ -145,30 +161,31 @@
 
 /* Upload video styles */
 .upload-group {
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .video-upload-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
 }
 
 .upload-preview {
   flex: 1;
-  padding: 1rem;
+  padding: 0.7rem 0.9rem;
   background-color: var(--Background);
   border: 1px solid var(--Border);
   border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   color: var(--Text-Secondary);
+  font-size: 0.9rem;
 }
 
 .upload-preview i {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--Primary);
 }
 
@@ -178,7 +195,7 @@
 }
 
 .upload-button {
-  padding: 0.8rem 1.2rem;
+  padding: 0.6rem 1rem;
   background-color: var(--Primary);
   color: white;
   border: none;
@@ -187,8 +204,12 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   transition: all var(--Transition-Fast);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  min-width: 100px;
+  max-width: 140px;
 }
 
 .upload-button:hover {
@@ -198,15 +219,15 @@
 }
 
 .upload-button i {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .upload-progress {
-  height: 6px;
+  height: 4px;
   width: 100%;
   background-color: var(--Surface-Elevated);
-  border-radius: 3px;
-  margin-top: 1rem;
+  border-radius: 2px;
+  margin-top: 0.8rem;
   overflow: hidden;
   visibility: hidden;
 }
@@ -219,29 +240,29 @@
   height: 100%;
   background: linear-gradient(to right, var(--Primary), var(--Accent));
   width: 0%;
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
 
 /* Form actions */
 .form-actions {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
 }
 
 .save-button {
-  padding: 0.8rem 2rem;
+  padding: 0.7rem 1.5rem;
   background-color: var(--Accent);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   transition: all var(--Transition-Fast);
   box-shadow: var(--Shadow-Small);
 }
@@ -253,38 +274,56 @@
 }
 
 .save-button i {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .video-create-container {
-    margin: 1.5rem auto;
-    padding: 0 1rem;
+    padding: 1rem;
   }
 
   .video-create-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .video-create-content {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
+}
 
+@media (max-width: 576px) {
+  .video-create-header h1 {
+    font-size: 1.3rem;
+  }
+  
   .video-upload-container {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .upload-button {
-    width: 100%;
+    width: auto;
+    min-width: 100px;
+    max-width: 140px;
     justify-content: center;
+    margin-top: 0;
   }
 
   .save-button {
     width: 100%;
     justify-content: center;
+  }
+  
+  .form-group label {
+    font-size: 0.85rem;
+  }
+  
+  .video-create-content {
+    padding: 1rem;
   }
 }
