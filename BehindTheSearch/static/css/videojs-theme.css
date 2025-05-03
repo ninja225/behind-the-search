@@ -79,7 +79,7 @@
   text-shadow: 0 0 10px rgba(209, 106, 223, 0.7);
 }
 
-/* Remove download button if it appears */
+/* Remove download button */
 .vjs-control.vjs-button.vjs-download-button {
   display: none !important;
 }
