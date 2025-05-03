@@ -23,7 +23,7 @@ def loginUser(request):
             if user.access == False:
                 return redirect('waiting-page')
             else:
-                return redirect('landing-page')
+                return redirect('video_list')
         else:
             messages.error(request, "Username or Password is incorrect")
 
