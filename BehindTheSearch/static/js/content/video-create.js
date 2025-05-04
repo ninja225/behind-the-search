@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", function () {
     form.querySelector('input[name="description"]') ||
     form.querySelector('textarea[name="description"]');
   const lessonNumberInput = form.querySelector('input[name="lesson_number"]');
+  const bunnyVideoIdInput = document.querySelector(
+    'input[name="bunny_video_id"]'
+  );
 
   // Set initial content if there's existing description
   if (descriptionInput.value) {
@@ -32,6 +35,35 @@ document.addEventListener("DOMContentLoaded", function () {
       quill.setText(descriptionInput.value);
     }
   }
+
+  // Bunny.net video preview functionality
+  const previewButton = document.getElementById("preview-bunny-btn");
+  const previewContainer = document.querySelector(".bunny-preview");
+  const previewIframe = document.getElementById("bunny-preview-iframe");
+
+  previewButton.addEventListener("click", function () {
+    const videoId = bunnyVideoIdInput.value.trim();
+    const libraryId = "420524"; // Default library ID
+
+    if (videoId) {
+      // Update the iframe src
+      const embedUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true`;
+      previewIframe.src = embedUrl;
+
+      // Show the preview container
+      previewContainer.style.display = "block";
+
+      // Change button text
+      previewButton.innerHTML = '<i class="fas fa-sync"></i> Refresh Preview';
+    } else {
+      // Show error if no video ID
+      showToast(
+        "Error",
+        "Please enter a Bunny.net video ID to preview",
+        "error"
+      );
+    }
+  });
 
   // Check if lesson number already exists
   lessonNumberInput.addEventListener("blur", function (e) {
@@ -72,47 +104,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "error"
       );
       lessonNumberInput.focus();
+      return;
+    }
+
+    // Validate that video ID is provided
+    if (!bunnyVideoIdInput.value.trim()) {
+      e.preventDefault();
+      showToast("Error", "Please enter a Bunny.net video ID", "error");
+      bunnyVideoIdInput.focus();
     }
   });
-
-  // File upload handling
-  const fileInput = document.querySelector('input[type="file"]');
-  const fileNameDisplay = document.getElementById("file-name");
-  const uploadProgress = document.getElementById("upload-progress");
-  const progressBar = uploadProgress.querySelector(".progress-bar");
-
-  fileInput.addEventListener("change", function (e) {
-    if (this.files && this.files[0]) {
-      const file = this.files[0];
-      fileNameDisplay.textContent = file.name;
-
-      // Reset progress bar
-      uploadProgress.classList.add("active");
-      progressBar.style.width = "0%";
-
-      // Simulate upload progress (for UI demonstration)
-      simulateProgress();
-    } else {
-      fileNameDisplay.textContent = "No file selected";
-      uploadProgress.classList.remove("active");
-    }
-  });
-
-  // Function to simulate file upload progress
-  function simulateProgress() {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 15;
-      if (progress > 100) {
-        progress = 100;
-        clearInterval(interval);
-
-        // Hide progress after 1 second of completion
-        setTimeout(() => {
-          uploadProgress.classList.remove("active");
-        }, 1000);
-      }
-      progressBar.style.width = progress + "%";
-    }, 500);
-  }
 });
