@@ -10,6 +10,67 @@ from django.views.decorators.http import require_POST
 import json
 
 
+@access_required
+def sections_list(request):
+    # Fetch all VideoSection objects from the database
+    sections = VideoSection.objects.all()
+
+    context = {
+        'sections': sections,
+    }
+
+    return render(request, 'content/sections_list.html', context)
+
+
+@superuser_required
+def delete_section(request, section_id):
+    section = get_object_or_404(VideoSection, id=section_id)
+    section.delete()
+    return redirect('sections_list')\
+
+
+@superuser_required
+def edit_section(request, section_id):
+    section = get_object_or_404(VideoSection, id=section_id)
+
+    if request.method == 'POST':
+        form = VideoSectionForm(request.POST, instance=section)
+        if form.is_valid():
+            form.save()
+            return redirect('section_detail', section_id=section.id)
+    else:
+        form = VideoSectionForm(instance=section)
+
+    return render(request, 'content/edit_section.html', {'form': form, 'section': section})
+
+
+@access_required
+def section_detail(request, section_id):
+    section = get_object_or_404(VideoSection, id=section_id)
+    videos = CourseVideo.objects.filter(section=section).order_by('lesson_number')
+    description = section.description
+
+    context = {
+        'description': description,
+        'section': section,
+        'videos': videos,
+    }
+
+    return render(request, 'content/section_detail.html', context)
+
+
+@superuser_required
+def create_section(request):
+    if request.method == 'POST':
+        form = VideoSectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('sections_list')
+    else:
+        form = VideoSectionForm()
+
+    return render(request, 'content/create_section.html', {'form': form})
+
 
 @access_required
 def stream_video(request, id):
