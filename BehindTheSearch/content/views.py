@@ -114,7 +114,7 @@ def create_course_video(request):
         form = CourseVideoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('video_list')
+            return redirect('video_list_by_section', section_id=form.cleaned_data['section'].id)
     else:
         form = CourseVideoForm()
 
