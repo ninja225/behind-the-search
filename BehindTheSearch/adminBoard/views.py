@@ -19,3 +19,4 @@ def getUser(request,pk):
     user = CustomUser.objects.get(id = pk)
     context = {'user':user}
     return render (request,'adminBoard/single-user.html',context)
+
