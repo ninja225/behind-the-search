@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handle form submission
   const form = document.getElementById("video-form");
   const lessonNumberInput = form.querySelector('input[name="lesson_number"]');
+  const sectionSelect = form.querySelector('select[name="section"]');
   const bunnyVideoIdInput = document.querySelector(
     'input[name="bunny_video_id"]'
   );
@@ -39,9 +40,13 @@ document.addEventListener("DOMContentLoaded", function () {
   lessonNumberInput?.addEventListener("blur", function (e) {
     const lessonNumber = this.value.trim();
     if (lessonNumber === "") return;
+    
+    // Get the selected section ID
+    const sectionId = sectionSelect.value;
+    if (!sectionId) return;
 
-    // Using the newly created API endpoint
-    fetch(`/content/api/check-lesson-number/?number=${lessonNumber}`)
+    // Using the updated API endpoint with section_id parameter
+    fetch(`/content/api/check-lesson-number/?number=${lessonNumber}&section_id=${sectionId}`)
       .then((response) => {
         // Check if the response is ok before trying to parse JSON
         if (!response.ok) {
@@ -54,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Show toast notification
           showToast(
             "Warning",
-            `Lesson number ${lessonNumber} already exists. Please choose a different number.`,
+            `Lesson number ${lessonNumber} already exists in this section. Please choose a different number.`,
             "warning"
           );
           this.classList.add("error");
@@ -67,6 +72,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Remove the error class in case of API errors to avoid blocking submission
         this.classList.remove("error");
       });
+  });
+
+  // Also check when section changes
+  sectionSelect?.addEventListener("change", function() {
+    // If there's a value in the lesson number field, validate it for the new section
+    if (lessonNumberInput.value.trim() !== "") {
+      lessonNumberInput.dispatchEvent(new Event('blur'));
+    }
   });
 
   // Form validation

@@ -4,109 +4,102 @@
 {% block title %}{{ section.title }} - Behind The Search{% endblock %} 
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/content/sections.css' %}" />
-<link rel="stylesheet" href="{% static 'css/content/videos-list.css' %}" />
+<link rel="stylesheet" href="{% static 'css/section/section_detail.css' %}" />
 {% endblock %} 
 
 {% block content %}
-<div class="section-detail-container">
-  <div class="section-detail-header">
-    <div class="section-title-area">
-      <h1>{{ section.title }}</h1>
-      <p class="section-description">{{ section.description }}</p>
+<div class="section-layout">
+  <!-- Fixed sidebar at the far left -->
+  <aside class="section-videos-sidebar">
+    <div class="videos-sidebar-header">
+      <div class="course-progress-container">
+        <div class="course-progress-bar">
+          <div class="course-progress-fill" id="courseProgressFill"></div>
+        </div>
+        <div class="course-progress-text">
+          <span id="courseProgressText">0/0 completed</span>
+          <span id="courseProgressPercentage">0%</span>
+        </div>
+      </div>
     </div>
 
-    {% if user.is_superuser %}
-    <div class="section-actions">
-      <a href="{% url 'edit_section' section.id %}" class="btn-edit">
-        <i class="fas fa-edit"></i> Edit
+    <div class="videos-list">
+      {% for video in videos %}
+      <a href="{% url 'video_detail' video.id %}" 
+         class="video-item"
+         data-video-id="{{ video.id }}"
+         data-completed="{% if video.mark_as_watched %}true{% else %}false{% endif %}">
+        <div class="video-number">{{ forloop.counter }}</div>
+        <div class="video-info">
+          <h4 class="video-title">{{ video.title }}</h4>
+          <div class="video-meta">
+            {% if video.mark_as_watched %}
+            <span class="video-status completed">
+              <i class="fas fa-check-circle"></i> Completed
+            </span>
+            {% else %}
+            <span class="video-status pending">
+              <i class="fas fa-circle"></i> Not started
+            </span>
+            {% endif %}
+          </div>
+        </div>
       </a>
-      <button type="button" id="deleteButton" class="btn-delete">
-        <i class="fas fa-trash-alt"></i> Delete
-      </button>
-    </div>
-    {% endif %}
-  </div>
-
-  <div class="video-course-container">
-    <!-- Sidebar with section videos only -->
-    <aside class="video-course-sidebar">
-      <div class="video-sidebar-header">
-        <h3>{{ section.title }} Videos</h3>
-        
-        <!-- Section Progress Bar -->
-        <div class="course-progress-container">
-          <div class="course-progress-bar">
-            <div class="course-progress-fill" id="courseProgressFill"></div>
-          </div>
-          <div class="course-progress-text">
-            <span id="courseProgressText">0/0 completed</span>
-            <span id="courseProgressPercentage">0%</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="video-lesson-list">
-        {% for video in videos %}
-        <a href="{% url 'video_detail' video.id %}" 
-           class="video-lesson-item"
-           data-video-id="{{ video.id }}"
-           data-completed="{% if video.mark_as_watched %}true{% else %}false{% endif %}">
-          <div class="video-lesson-number">{{ forloop.counter }}</div>
-          <div class="video-lesson-info">
-            <h4 class="video-lesson-title">{{ video.title }}</h4>
-            <div class="video-lesson-meta">
-              {% if video.mark_as_watched %}
-              <span class="video-lesson-status completed">
-                <i class="fas fa-check-circle"></i> Completed
-              </span>
-              {% else %}
-              <span class="video-lesson-status pending">
-                <i class="fas fa-circle"></i> Not started
-              </span>
-              {% endif %}
-              
-              {% if user.is_superuser %}
-              <a href="{% url 'edit_course_video' video.id %}" class="video-admin-link">
-                <i class="fas fa-edit"></i> Edit
-              </a>
-              {% endif %}
-            </div>
-          </div>
-        </a>
-        {% empty %}
-        <div class="video-no-lessons">
-          <i class="fas fa-video-slash"></i>
-          <p>No videos in this section yet.</p>
-          {% if user.is_superuser %}
-          <a href="{% url 'create_course_video' %}" class="create-section-btn" style="margin-top: 1rem">
-            <i class="fas fa-plus"></i> Add Video
-          </a>
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
-    </aside>
-
-    <!-- Main content area -->
-    <main class="video-course-content">
-      <div class="video-welcome-screen">
-        <img src="{% static 'imgs/logo-trans.png' %}" alt="Course Logo" class="video-welcome-logo" />
-        <h1>{{ section.title }}</h1>
-        <p>Select a video from the sidebar to begin learning this section.</p>
-        {% if videos %}
-        <a href="{% url 'video_detail' videos.0.id %}" class="video-start-course-btn">
-          <i class="fas fa-play-circle"></i> Start First Video
+      {% empty %}
+      <div class="no-videos">
+        <i class="fas fa-video-slash"></i>
+        <p>No videos in this section yet.</p>
+        {% if user.is_superuser %}
+        <a href="{% url 'create_course_video' %}" class="add-video-btn">
+          <i class="fas fa-plus"></i> Add Video
         </a>
         {% endif %}
       </div>
-    </main>
-  </div>
+      {% endfor %}
+    </div>
+  </aside>
 
-  <div class="back-navigation">
-    <a href="{% url 'sections_list' %}" class="back-link">
-      <i class="fas fa-arrow-left"></i> Back to Sections
-    </a>
+  <!-- Main content with appropriate margin -->
+  <div class="section-main-wrapper">
+    <div class="section-detail-container">
+      <div class="section-detail-header">
+        <h1>{{ section.title }}</h1>
+        
+        {% if user.is_superuser %}
+        <div class="section-actions">
+          <a href="{% url 'edit_section' section.id %}" class="btn-edit">
+            <i class="fas fa-edit"></i> Edit
+          </a>
+          <button type="button" id="deleteButton" class="btn-delete">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+        </div>
+        {% endif %}
+      </div>
+
+      <main class="section-main-content">
+        <div class="section-description-area">
+          <h2>About this section</h2>
+          <div class="section-description">
+            {{ section.description|safe }}
+          </div>
+          
+          {% if videos %}
+          <div class="section-actions-area">
+            <a href="{% url 'video_detail' videos.0.id %}" class="start-course-btn">
+              <i class="fas fa-play-circle"></i> Start Learning
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </main>
+
+      <div class="back-navigation">
+        <a href="{% url 'sections_list' %}" class="back-link">
+          <i class="fas fa-arrow-left"></i> Back to Sections
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -138,64 +131,5 @@
 {% endblock %} 
 
 {% block extra_js %}
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Delete confirmation modal functionality
-    const deleteButton = document.getElementById("deleteButton");
-    const deleteModal = document.getElementById("deleteModal");
-    const cancelDelete = document.getElementById("cancelDelete");
-
-    if (deleteButton && deleteModal && cancelDelete) {
-      // Show the modal when delete button is clicked
-      deleteButton.addEventListener("click", function () {
-        deleteModal.classList.add("active");
-      });
-
-      // Hide the modal when cancel is clicked
-      cancelDelete.addEventListener("click", function () {
-        deleteModal.classList.remove("active");
-      });
-
-      // Close modal when clicking outside
-      deleteModal.addEventListener("click", function (e) {
-        if (e.target === deleteModal) {
-          deleteModal.classList.remove("active");
-        }
-      });
-    }
-    
-    // Calculate and update section progress
-    function updateCourseProgress() {
-      const videoItems = document.querySelectorAll('.video-lesson-item');
-      const totalVideos = videoItems.length;
-      let completedVideos = 0;
-      
-      videoItems.forEach(item => {
-        if (item.getAttribute('data-completed') === 'true') {
-          completedVideos++;
-        }
-      });
-      
-      const progressPercentage = totalVideos > 0 ? Math.round((completedVideos / totalVideos) * 100) : 0;
-      const progressFill = document.getElementById('courseProgressFill');
-      const progressText = document.getElementById('courseProgressText');
-      const progressPercentageText = document.getElementById('courseProgressPercentage');
-      
-      if (progressFill) {
-        progressFill.style.width = `${progressPercentage}%`;
-      }
-      
-      if (progressText) {
-        progressText.textContent = `${completedVideos}/${totalVideos} completed`;
-      }
-      
-      if (progressPercentageText) {
-        progressPercentageText.textContent = `${progressPercentage}%`;
-      }
-    }
-    
-    // Initialize progress
-    updateCourseProgress();
-  });
-</script>
+<script src="{% static 'js/content/section_detail.js' %}"></script>
 {% endblock %}

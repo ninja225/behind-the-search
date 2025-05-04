@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{% static 'css/root.css' %}" />
     <link rel="stylesheet" href="{% static 'css/base/base.css' %}" />
     <link rel="stylesheet" href="{% static 'css/base/toast.css' %}" />
-    <link href="{% static 'css/videojs-theme.css' %}" rel="stylesheet" />
+    <!-- <link href="{% static 'css/videojs-theme.css' %}" rel="stylesheet" /> -->
     {% block extra_css %}{% endblock %}
 
     <!-- AOS Animation Library -->
@@ -45,16 +45,6 @@
       type="module"
       src="https://unpkg.com/@splinetool/viewer@1.9.89/build/spline-viewer.js"
     ></script>
-
-    <!-- <script
-      type="module"
-      src="https://unpkg.com/@splinetool/viewer@1.9.89/build/spline-viewer.js"
-    ></script>
-    <spline-viewer
-      loading-anim-type="spinner-small-dark"
-      url="https://prod.spline.design/vHkFJMIevZIDymJA/scene.splinecode"
-    ></spline-viewer> -->
-
     <!-- Vanilla Toast - Simple Toast Notifications -->
     <link
       rel="stylesheet"
@@ -81,33 +71,29 @@
     <!-- Header Section -->
     <header class="site-header">
       {% block header %}
-      <nav class="main-nav container">
+      <nav class="main-nav">
         <div class="logo-container">
           <a href="{% url 'landing-page' %}">
-            <img
-              src="{% static 'imgs/logo-trans.png' %}"
-              alt="Behind The Search Logo"
-              class="logo"
-            />
+            <img src="{% static 'imgs/logo-trans.png' %}" alt="Behind The Search Logo" class="logo" />
           </a>
         </div>
         <div class="site-title">
-          <h1 class="gradient-text" data-text="Behind The Search">
-            Behind The Search
-          </h1>
+          <h1 class="gradient-text">Behind The Search</h1>
         </div>
         <div class="nav-links">
           {% if user.is_authenticated %}
-          <a
-            href="{% if user.access %}{% url 'sections_list' %}{% else %}{% url 'waiting-page' %}{% endif %}"
-            class="nav-button btn-course"
-          >
+          <a href="{% if user.access %}{% url 'sections_list' %}{% else %}{% url 'waiting-page' %}{% endif %}" class="nav-button btn-course">
             <i class="fas fa-play-circle"></i>
             <span>View Course</span>
           </a>
           <a href="{% url 'logout' %}" class="nav-button btn-logout">
             <span>Logout</span>
           </a>
+          {% if user.is_superuser %}
+          <a href="{% url 'admin-dashboard' %}" class="nav-button btn-admin" title="Admin Dashboard">
+            <i class="fas fa-cog"></i>
+          </a>
+          {% endif %}
           {% else %}
           <a href="{% url 'login' %}" class="nav-button btn-login">
             <span>Login</span>
@@ -122,12 +108,14 @@
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">{% block content %}{% endblock content %}</main>
+    <main class="main-content">
+      {% block content %}{% endblock content %}
+    </main>
 
     <!-- Footer Section -->
     <footer class="site-footer">
       {% block footer %}
-      <div class="footer-content container">
+      <div class="footer-content">
         <div class="social-links">
           <a href="#" class="social-link" aria-label="Discord">
             <i class="fab fa-discord"></i>
@@ -139,17 +127,11 @@
             <i class="fab fa-instagram"></i>
           </a>
         </div>
-
         <p class="copyright">
           &copy; {% now "Y" %} Behind The Search. All rights reserved
         </p>
-
         <div class="footer-logo">
-          <img
-            src="{% static 'imgs/logo-trans.png' %}"
-            alt="Behind The Search Logo"
-            class="footer-logo-img"
-          />
+          <img src="{% static 'imgs/logo-trans.png' %}" alt="Behind The Search Logo" class="footer-logo-img" />
         </div>
       </div>
       {% endblock %}

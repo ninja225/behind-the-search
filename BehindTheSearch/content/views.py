@@ -74,9 +74,6 @@ def create_section(request):
     return render(request, 'content/create_section.html', {'form': form})
 
 
-
-
-
 @access_required
 def video_detail(request, id):
     video = get_object_or_404(CourseVideo, id=id)
@@ -122,12 +119,12 @@ def edit_course_video(request, video_id):
         form = CourseVideoForm(request.POST, request.FILES, instance=video)
         if form.is_valid():
             form.save()
-            section_id=form.cleaned_data['section'].id
+            section_id = form.cleaned_data['section'].id
             return redirect('section_detail', section_id)
     else:
         form = CourseVideoForm(instance=video)
 
-    return render(request, 'content/edit_course_video.html', {'form': form, 'video': video,'section_id':video.section.id})
+    return render(request, 'content/edit_course_video.html', {'form': form, 'video': video, 'section_id': video.section.id})
 
 
 @superuser_required
@@ -164,18 +161,26 @@ def mark_video_watched(request, video_id):
 # API endpoint to check if a lesson number already exists {Ninja- Ai}
 def check_lesson_number(request):
     """
-    Checks if a lesson number already exists in the database.
+    Checks if a lesson number already exists within a specific section.
     Returns JSON response with 'exists' property.
     """
     number = request.GET.get('number')
+    section_id = request.GET.get('section_id')
     video_id = request.GET.get('current_id')
 
     if not number:
         return JsonResponse({'error': 'Lesson number is required'}, status=400)
 
+    if not section_id:
+        return JsonResponse({'error': 'Section ID is required'}, status=400)
+
     try:
         number = int(number)
-        query = CourseVideo.objects.filter(lesson_number=number)
+        section_id = int(section_id)
+
+        # Filter by both section_id and lesson_number
+        query = CourseVideo.objects.filter(
+            lesson_number=number, section_id=section_id)
 
         # If editing an existing video, exclude the current video from the check
         if video_id:
@@ -188,4 +193,4 @@ def check_lesson_number(request):
         exists = query.exists()
         return JsonResponse({'exists': exists})
     except ValueError:
-        return JsonResponse({'error': 'Invalid lesson number'}, status=400)
+        return JsonResponse({'error': 'Invalid lesson number or section ID'}, status=400)

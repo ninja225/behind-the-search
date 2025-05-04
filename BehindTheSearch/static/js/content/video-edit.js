@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handle form submission
   const form = document.getElementById("video-form");
   const lessonNumberInput = form.querySelector('input[name="lesson_number"]');
+  const sectionSelect = form.querySelector('select[name="section"]');
   const bunnyVideoIdInput = document.querySelector(
     'input[name="bunny_video_id"]'
   );
@@ -47,9 +48,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const lessonNumber = this.value.trim();
     if (lessonNumber === "" || lessonNumber === initialLessonNumber) return;
 
-    // Include the current video ID in the request to exclude it from the check
+    // Get the selected section ID
+    const sectionId = sectionSelect.value;
+    if (!sectionId) return;
+
+    // Include the current video ID and section ID in the request
     fetch(
-      `/content/api/check-lesson-number/?number=${lessonNumber}&current_id=${currentVideoId}`
+      `/content/api/check-lesson-number/?number=${lessonNumber}&section_id=${sectionId}&current_id=${currentVideoId}`
     )
       .then((response) => {
         // Check if the response is ok before trying to parse JSON
@@ -63,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Show toast notification
           showToast(
             "Warning",
-            `Lesson number ${lessonNumber} already exists. Please choose a different number.`,
+            `Lesson number ${lessonNumber} already exists in this section. Please choose a different number.`,
             "warning"
           );
           this.classList.add("error");
@@ -76,6 +81,15 @@ document.addEventListener("DOMContentLoaded", function () {
         // Remove the error class in case of API errors to avoid blocking submission
         this.classList.remove("error");
       });
+  });
+
+  // Also check when section changes
+  sectionSelect?.addEventListener("change", function() {
+    // If there's a value in the lesson number field, validate it for the new section
+    if (lessonNumberInput.value.trim() !== "" && 
+        lessonNumberInput.value.trim() !== initialLessonNumber) {
+      lessonNumberInput.dispatchEvent(new Event('blur'));
+    }
   });
 
   // Form validation
