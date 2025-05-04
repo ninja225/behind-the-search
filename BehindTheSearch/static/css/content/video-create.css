@@ -89,7 +89,8 @@
 }
 
 .form-group input[type="text"],
-.form-group input[type="number"] {
+.form-group input[type="number"],
+.form-group select {
   width: 100%;
   padding: 0.7rem 0.9rem;
   border: 1px solid var(--Border);
@@ -101,7 +102,8 @@
 }
 
 .form-group input[type="text"]:focus,
-.form-group input[type="number"]:focus {
+.form-group input[type="number"]:focus,
+.form-group select:focus {
   border-color: var(--Border-Focus);
   box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.1);
   outline: none;
@@ -113,6 +115,18 @@
   margin-top: 0.4rem;
 }
 
+/* Form row for side-by-side inputs */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.half-width {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 /* Code element styling */
 .form-help code {
   background: var(--Background-Secondary);
@@ -121,6 +135,23 @@
   font-family: monospace;
   font-size: 0.9em;
   word-break: break-all;
+}
+
+/* Section headers */
+.section-title {
+  font-size: 1.1rem;
+  color: var(--Text-Primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--Border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-title i {
+  color: var(--Primary);
+  font-size: 1rem;
 }
 
 /* Description editor styles */
@@ -254,6 +285,55 @@
   transition: width 0.3s ease;
 }
 
+/* Bunny video section */
+.bunny-video-section {
+  background-color: var(--Background);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--Shadow-Small);
+}
+
+/* Bunny.net preview styling */
+.bunny-preview-container {
+  margin-top: 1.25rem;
+  background: var(--Background-Secondary);
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.bunny-preview-container h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  color: var(--Text-Primary);
+}
+
+.bunny-preview {
+  margin-bottom: 15px;
+  background: #000;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.preview-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--Primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preview-button:hover {
+  background: var(--Primary-Dark);
+}
+
 /* Form actions */
 .form-actions {
   margin-top: 1.5rem;
@@ -331,46 +411,6 @@
   display: block;
 }
 
-/* Bunny.net preview styling */
-.bunny-preview-container {
-  margin-top: 20px;
-  background: var(--Background-Secondary);
-  border-radius: 8px;
-  padding: 15px;
-}
-
-.bunny-preview-container h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 16px;
-  color: var(--Text-Primary);
-}
-
-.bunny-preview {
-  margin-bottom: 15px;
-  background: #000;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.preview-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--Primary);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.preview-button:hover {
-  background: var(--Primary-Dark);
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .video-create-container {
@@ -387,25 +427,25 @@
   .video-create-content {
     padding: 1.25rem;
   }
+
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .metadata-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 @media (max-width: 576px) {
   .video-create-header h1 {
     font-size: 1.3rem;
-  }
-
-  .video-upload-container {
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .upload-button {
-    width: auto;
-    min-width: 100px;
-    max-width: 140px;
-    justify-content: center;
-    margin-top: 0;
   }
 
   .save-button {
@@ -418,6 +458,12 @@
   }
 
   .video-create-content {
+    padding: 1rem;
+  }
+
+  .bunny-video-section,
+  .metadata-section,
+  .resources-section {
     padding: 1rem;
   }
 }

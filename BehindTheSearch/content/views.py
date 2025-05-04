@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CourseVideo
-from .forms import CourseVideoForm
+from .models import CourseVideo, VideoSection
+from .forms import CourseVideoForm, VideoSectionForm
 from adminBoard.decorators import superuser_required, access_required
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -29,6 +29,7 @@ def delete_section(request, section_id):
     return redirect('sections_list')\
 
 
+
 @superuser_required
 def edit_section(request, section_id):
     section = get_object_or_404(VideoSection, id=section_id)
@@ -47,7 +48,8 @@ def edit_section(request, section_id):
 @access_required
 def section_detail(request, section_id):
     section = get_object_or_404(VideoSection, id=section_id)
-    videos = CourseVideo.objects.filter(section=section).order_by('lesson_number')
+    videos = CourseVideo.objects.filter(
+        section=section).order_by('lesson_number')
     description = section.description
 
     context = {
@@ -81,7 +83,6 @@ def stream_video(request, id):
         raise Http404("Video not found.")
 
 
-
 @access_required
 def video_list(request):
     videos = CourseVideo.objects.all().order_by('lesson_number')
@@ -95,7 +96,6 @@ def video_list(request):
         'query': query,
     }
     return render(request, 'content/video_list.html', context)
-
 
 
 @access_required
@@ -150,7 +150,6 @@ def edit_course_video(request, video_id):
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
 
 
-
 @access_required
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
@@ -182,3 +181,33 @@ def mark_video_watched(request, video_id):
             'success': False,
             'error': str(e)
         }, status=400)
+
+
+# API endpoint to check if a lesson number already exists {Ninja- Ai}
+def check_lesson_number(request):
+    """
+    Checks if a lesson number already exists in the database.
+    Returns JSON response with 'exists' property.
+    """
+    number = request.GET.get('number')
+    video_id = request.GET.get('current_id')
+
+    if not number:
+        return JsonResponse({'error': 'Lesson number is required'}, status=400)
+
+    try:
+        number = int(number)
+        query = CourseVideo.objects.filter(lesson_number=number)
+
+        # If editing an existing video, exclude the current video from the check
+        if video_id:
+            try:
+                video_id = int(video_id)
+                query = query.exclude(id=video_id)
+            except ValueError:
+                pass
+
+        exists = query.exists()
+        return JsonResponse({'exists': exists})
+    except ValueError:
+        return JsonResponse({'error': 'Invalid lesson number'}, status=400)
