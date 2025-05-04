@@ -1,13 +1,49 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %} {% block title %}Edit Section: {{
+section.title }} - Behind The Search{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/content/sections.css' %}" />
+{% endblock %} {% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h1>Edit Section: {{ section.title }}</h1>
+    <a href="{% url 'section_detail' section.id %}" class="btn-cancel">
+      <i class="fas fa-times"></i> Cancel
+    </a>
+  </div>
 
-{% block content %}
-<h1>Edit Section: {{ section.title }}</h1>
+  <div class="section-form">
+    <form method="post">
+      {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+      <div class="form-group">
+        <label for="{{ form.title.id_for_label }}">Section Title</label>
+        {{ form.title }}
+        <div class="form-help">Enter a clear title for this course section</div>
+        {% if form.title.errors %}
+        <div class="error-message">{{ form.title.errors }}</div>
+        {% endif %}
+      </div>
 
-<a href="{% url 'section_detail' section.id %}">Cancel</a>
+      <div class="form-group">
+        <label for="{{ form.description.id_for_label }}">Description</label>
+        {{ form.description }}
+        <div class="form-help">
+          Provide a detailed description of what students will learn in this
+          section
+        </div>
+        {% if form.description.errors %}
+        <div class="error-message">{{ form.description.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'section_detail' section.id %}" class="btn-cancel">
+          <i class="fas fa-times"></i> Cancel
+        </a>
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
