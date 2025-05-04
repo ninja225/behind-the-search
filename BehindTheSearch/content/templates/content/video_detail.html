@@ -13,7 +13,7 @@
 <div class="video-detail-container">
   <div class="video-detail-header">
     <h1>{{ video.title }}</h1>
-    <a href="{% url 'video_list_by_section' video.section.id %}" class="back-button">
+    <a href="{% url 'section_detail' video.section.id %}" class="back-button">
       <i class="fas fa-arrow-left"></i> Back to Video List
     </a>
   </div>
@@ -80,20 +80,26 @@
 
   <div class="video-detail-navigation">
     {% if prev_video %}
-      <a href="{% url 'video_detail' prev_video.id %}" class="video-detail-nav-button prev">
-        <i class="fas fa-arrow-left"></i> Previous Lesson
-      </a>
-    {% endif %}
+    <a
+      href="{% url 'video_detail' prev_video.id %}"
+      class="video-detail-nav-button prev"
+    >
+      <i class="fas fa-arrow-left"></i> Previous Lesson
+    </a>
+    {% endif %} 
     
     {% if next_video %}
-      <a href="{% url 'video_detail' next_video.id %}" class="video-detail-nav-button next">
-        Next Lesson <i class="fas fa-arrow-right"></i>
-      </a>
+    <a
+      href="{% url 'video_detail' next_video.id %}"
+      class="video-detail-nav-button next"
+    >
+      Next Lesson <i class="fas fa-arrow-right"></i>
+    </a>
     {% endif %}
   </div>
 </div>
-{% endblock %}
+{% endblock %} 
 
 {% block extra_js %}
-  <script src="{% static 'js/content/video-details.js' %}"></script>
+<script src="{% static 'js/content/video-details.js' %}"></script>
 {% endblock %}
