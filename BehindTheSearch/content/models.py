@@ -15,8 +15,6 @@ class CourseVideo(models.Model):
     title = models.CharField(max_length=255)
     mark_as_watched = models.BooleanField(default=False)
     lesson_number = models.IntegerField(unique=True, null=False)
-    embed_code = models.TextField(
-        blank=False, help_text="Paste the Bunny.net embed iframe code here.", null=False, default="")
     bunny_video_id = models.CharField(max_length=255, null=True, blank=True,
                                       help_text="The video ID from Bunny.net (e.g., 'eefdc431-726a-4ccc-b2f1-127b9aa449a5')")
     bunny_library_id = models.CharField(
