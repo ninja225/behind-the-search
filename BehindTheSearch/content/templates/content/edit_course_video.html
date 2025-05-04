@@ -9,7 +9,7 @@ video.title }} - Behind The Search{% endblock %} {% block extra_css %}
       <h1 class="truncated-title" title="{{ video.title }}">
         Edit Video: {{ video.title }}
       </h1>
-      <a href="{% url 'video_list_by_section' section_id %}" class="back-button">
+      <a href="{% url 'section_detail' section_id %}" class="back-button">
         <i class="fas fa-arrow-left"></i> Back to List
       </a>
     </div>

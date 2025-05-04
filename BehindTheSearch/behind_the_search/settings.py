@@ -141,6 +141,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-LOGIN_REDIRECT_URL = 'video_list'
+LOGIN_REDIRECT_URL = 'sections_list'
 LOGOUT_REDIRECT_URL = 'landing-page'
 
