@@ -24,18 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     'input[name="bunny_video_id"]'
   );
 
-  // Set initial content if there's existing description
-  if (descriptionInput.value) {
-    try {
-      // Check if it's JSON (HTML format from Quill)
-      const content = JSON.parse(descriptionInput.value);
-      quill.setContents(content);
-    } catch (e) {
-      // If not JSON, it's probably plain text
-      quill.setText(descriptionInput.value);
-    }
-  }
-
   // Bunny.net video preview functionality
   const previewButton = document.getElementById("preview-bunny-btn");
   const previewContainer = document.querySelector(".bunny-preview");
