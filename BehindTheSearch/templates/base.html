@@ -99,7 +99,7 @@
         <div class="nav-links">
           {% if user.is_authenticated %}
           <a
-            href="{% if user.access %}{% url 'video_list' %}{% else %}{% url 'waiting-page' %}{% endif %}"
+            href="{% if user.access %}{% url 'sections_list' %}{% else %}{% url 'waiting-page' %}{% endif %}"
             class="nav-button btn-course"
           >
             <i class="fas fa-play-circle"></i>
