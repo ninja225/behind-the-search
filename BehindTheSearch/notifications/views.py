@@ -53,6 +53,9 @@ def reject_request(request, notification_id):
     notification.status = 'rejected'
     notification.message = f"{notification.from_user.username} has been rejected."
     notification.save()
+
+
+    user = notification.from_user
     send_mail(
         'Access Denied',
         f'Hello {user.username},\n\nYour access request has been rejected.',
