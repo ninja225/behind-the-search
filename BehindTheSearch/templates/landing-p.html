@@ -189,6 +189,7 @@
     </div>
 
     <div class="video-container" id="video-goto">
+<<<<<<< HEAD
       <div style="position: relative; padding-top: 56.25%">
         <iframe
           src="https://iframe.mediadelivery.net/embed/420524/eefdc431-726a-4ccc-b2f1-127b9aa449a5?autoplay=true&loop=false&muted=false&preload=true&responsive=true"
@@ -205,6 +206,25 @@
         >
         </iframe>
       </div>
+=======
+      <video
+        id="intro-video"
+        class="video-js vjs-default-skin vjs-big-play-centered"
+        controls
+        preload="auto"
+        poster="{% static 'imgs/logo-trans.png' %}"
+        data-setup='{"controlBar": {"pictureInPictureToggle": false, "fullscreenToggle": true}, "playbackRates": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]}'
+      >
+        <source src="https://iframe.mediadelivery.net/play/420524/eefdc431-726a-4ccc-b2f1-127b9aa449a5" type="video/mp4" />
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to
+          a web browser that
+          <a href="https://videojs.com/html5-video-support/" target="_blank">
+            supports HTML5 video
+          </a>
+        </p>
+      </video>
+>>>>>>> dba5c33c64178db2769a8b075f8439a2ef7f23dd
     </div>
 
     <div class="video-features">
