@@ -134,18 +134,19 @@ def edit_course_video(request, video_id):
         form = CourseVideoForm(request.POST, request.FILES, instance=video)
         if form.is_valid():
             form.save()
-            return redirect('video_list')
+            section_id=form.cleaned_data['section'].id
+            return redirect('video_list_by_section', section_id)
     else:
         form = CourseVideoForm(instance=video)
 
-    return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
+    return render(request, 'content/edit_course_video.html', {'form': form, 'video': video,'section_id':video.section.id})
 
 
 @superuser_required
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     video.delete()
-    return redirect('video_list')
+    return redirect('video_list_by_section', section_id=video.section.id)
 
 
 @access_required
