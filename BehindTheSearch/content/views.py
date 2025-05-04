@@ -77,21 +77,10 @@ def create_section(request):
 @access_required
 def video_list(request, section_id):
     section = get_object_or_404(VideoSection, id=section_id)
-    
-    videos = CourseVideo.objects.filter(section=section).order_by('lesson_number')
 
-<<<<<<< HEAD
+    videos = CourseVideo.objects.filter(
+        section=section).order_by('lesson_number')
 
-@access_required
-def video_list(request):
-    videos = CourseVideo.objects.all().order_by('lesson_number')
-
-    query = request.GET.get('search', '')
-    if query:
-        videos = videos.filter(
-            title__icontains=query).order_by('lesson_number')
-=======
->>>>>>> c4a51423adf056d306f84aae6749178ecbf41bd5
     context = {
         'section': section,
         'videos': videos,
@@ -152,17 +141,11 @@ def edit_course_video(request, video_id):
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
 
 
-<<<<<<< HEAD
-@access_required
-=======
-
 @superuser_required
->>>>>>> c4a51423adf056d306f84aae6749178ecbf41bd5
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     video.delete()
     return redirect('video_list')
-
 
 
 @access_required
