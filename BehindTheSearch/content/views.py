@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CourseVideo
-from .forms import CourseVideoForm
+from .models import CourseVideo,VideoSection
+from .forms import CourseVideoForm,VideoSectionForm
 from adminBoard.decorators import superuser_required, access_required
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
