@@ -8,7 +8,7 @@ def loginUser(request):
         if request.user.access == False:
             return redirect('waiting-page')
         else :
-            return redirect('video_list')
+            return redirect('section_list')
 
     if request.method == 'POST':
         username = request.POST['username'].lower()
@@ -26,7 +26,7 @@ def loginUser(request):
             if user.access == False:
                 return redirect('waiting-page')
             else:
-                return redirect('video_list')
+                return redirect('section_list')
         else:
             messages.error(request, "Username or Password is incorrect")
 
@@ -37,7 +37,7 @@ def registerUser(request):
         if request.user.access == False:
             return redirect('waiting-page')
         else :
-            return redirect('video_list')
+            return redirect('section_list')
     form = CustomUserCreationForm()
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -61,7 +61,7 @@ def landingPage(request):
 def waitingPage(request):
     if request.user.is_authenticated:
         if request.user.access == True:
-            return redirect('video_list')
+            return redirect('section_list')
 
     return render(request,'waiting-p.html')
 

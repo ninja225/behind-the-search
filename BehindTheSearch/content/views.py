@@ -75,13 +75,12 @@ def create_section(request):
 
 
 @access_required
-def stream_video(request, id):
-    video = get_object_or_404(CourseVideo, id=id)
-    try:
-        return FileResponse(video.video.open('rb'), content_type='video/mp4')
-    except FileNotFoundError:
-        raise Http404("Video not found.")
+def video_list(request, section_id):
+    section = get_object_or_404(VideoSection, id=section_id)
+    
+    videos = CourseVideo.objects.filter(section=section).order_by('lesson_number')
 
+<<<<<<< HEAD
 
 @access_required
 def video_list(request):
@@ -91,10 +90,13 @@ def video_list(request):
     if query:
         videos = videos.filter(
             title__icontains=query).order_by('lesson_number')
+=======
+>>>>>>> c4a51423adf056d306f84aae6749178ecbf41bd5
     context = {
+        'section': section,
         'videos': videos,
-        'query': query,
     }
+
     return render(request, 'content/video_list.html', context)
 
 
@@ -150,13 +152,17 @@ def edit_course_video(request, video_id):
     return render(request, 'content/edit_course_video.html', {'form': form, 'video': video})
 
 
+<<<<<<< HEAD
 @access_required
+=======
+
+@superuser_required
+>>>>>>> c4a51423adf056d306f84aae6749178ecbf41bd5
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     video.delete()
     return redirect('video_list')
 
-# This view is used to mark a video as watched or unwatched {Ai -Ninja}
 
 
 @access_required
