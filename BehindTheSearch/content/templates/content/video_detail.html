@@ -1,11 +1,19 @@
-{% extends 'base.html' %} {% load static %} {% block title %}{{ video.title }} -
-Behind The Search{% endblock %} {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/content/video-details.css' %}" />
-{% endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ video.title }} - Behind The Search
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/content/video-details.css' %}" />
+{% endblock %}
+
+{% block content %}
 <div class="video-detail-container">
   <div class="video-detail-header">
     <h1>{{ video.title }}</h1>
-    <a href="{% url 'video_list' %}" class="back-button">
+    <a href="{% url 'video_list_by_section' video.section.id %}" class="back-button">
       <i class="fas fa-arrow-left"></i> Back to Video List
     </a>
   </div>
@@ -16,35 +24,32 @@ Behind The Search{% endblock %} {% block extra_css %}
       <span>Lesson {{ video.lesson_number }}</span>
     </div>
     <div class="video-detail-meta-item">
-      <i
-        class="{% if video.mark_as_watched %}fas fa-check-circle{% else %}far fa-circle{% endif %}"
-      ></i>
-      <span
-        >{% if video.mark_as_watched %}Completed{% else %}Not yet completed{%
-        endif %}</span
-      >
+      <i class="{% if video.mark_as_watched %}fas fa-check-circle{% else %}far fa-circle{% endif %}"></i>
+      <span>
+        {% if video.mark_as_watched %}
+          Completed
+        {% else %}
+          Not yet completed
+        {% endif %}
+      </span>
     </div>
   </div>
 
   <div class="video-detail-player-container">
     {% if video.bunny_video_id %}
-    <div
-      class="bunny-video-wrapper"
-      style="position: relative; padding-top: 56.25%"
-    >
-      <iframe
-        src="https://iframe.mediadelivery.net/embed/{{ video.bunny_library_id }}/{{ video.bunny_video_id }}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
-        loading="lazy"
-        style="border: 0; position: absolute; top: 0; height: 100%; width: 100%"
-        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
-        allowfullscreen="true"
-      >
-      </iframe>
-    </div>
+      <div class="bunny-video-wrapper" style="position: relative; padding-top: 56.25%">
+        <iframe
+          src="https://iframe.mediadelivery.net/embed/{{ video.bunny_library_id }}/{{ video.bunny_video_id }}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
+          loading="lazy"
+          style="border: 0; position: absolute; top: 0; height: 100%; width: 100%"
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+          allowfullscreen="true">
+        </iframe>
+      </div>
     {% else %}
-    <div class="video-error-message">
-      <p>No video available for this lesson.</p>
-    </div>
+      <div class="video-error-message">
+        <p>No video available for this lesson.</p>
+      </div>
     {% endif %}
   </div>
 
@@ -63,33 +68,32 @@ Behind The Search{% endblock %} {% block extra_css %}
       <button
         id="markAsWatched"
         class="video-detail-mark-watched {% if video.mark_as_watched %}watched{% endif %}"
-        data-video-id="{{ video.id }}"
-      >
+        data-video-id="{{ video.id }}">
         {% if video.mark_as_watched %}
-        <i class="fas fa-check-circle"></i> Marked as Watched {% else %}
-        <i class="far fa-circle"></i> Mark as Watched {% endif %}
+          <i class="fas fa-check-circle"></i> Marked as Watched
+        {% else %}
+          <i class="far fa-circle"></i> Mark as Watched
+        {% endif %}
       </button>
     </div>
   </div>
 
   <div class="video-detail-navigation">
     {% if prev_video %}
-    <a
-      href="{% url 'video_detail' prev_video.id %}"
-      class="video-detail-nav-button prev"
-    >
-      <i class="fas fa-arrow-left"></i> Previous Lesson
-    </a>
-    {% endif %} {% if next_video %}
-    <a
-      href="{% url 'video_detail' next_video.id %}"
-      class="video-detail-nav-button next"
-    >
-      Next Lesson <i class="fas fa-arrow-right"></i>
-    </a>
+      <a href="{% url 'video_detail' prev_video.id %}" class="video-detail-nav-button prev">
+        <i class="fas fa-arrow-left"></i> Previous Lesson
+      </a>
+    {% endif %}
+    
+    {% if next_video %}
+      <a href="{% url 'video_detail' next_video.id %}" class="video-detail-nav-button next">
+        Next Lesson <i class="fas fa-arrow-right"></i>
+      </a>
     {% endif %}
   </div>
 </div>
-{% endblock %} {% block extra_js %}
-<script src="{% static 'js/content/video-details.js' %}"></script>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/content/video-details.js' %}"></script>
 {% endblock %}
