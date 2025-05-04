@@ -5,7 +5,7 @@ Behind The Search{% endblock %} {% block extra_css %}
 <div class="video-detail-container">
   <div class="video-detail-header">
     <h1>{{ video.title }}</h1>
-    <a href="{% url 'video_list' %}" class="back-button">
+    <a href="{% url 'section_detail' video.section.id %}" class="back-button">
       <i class="fas fa-arrow-left"></i> Back to Video List
     </a>
   </div>
@@ -80,7 +80,9 @@ Behind The Search{% endblock %} {% block extra_css %}
     >
       <i class="fas fa-arrow-left"></i> Previous Lesson
     </a>
-    {% endif %} {% if next_video %}
+    {% endif %} 
+    
+    {% if next_video %}
     <a
       href="{% url 'video_detail' next_video.id %}"
       class="video-detail-nav-button next"
@@ -90,6 +92,7 @@ Behind The Search{% endblock %} {% block extra_css %}
     {% endif %}
   </div>
 </div>
-{% endblock %} {% block extra_js %}
+{% endblock %} 
+{% block extra_js %}
 <script src="{% static 'js/content/video-details.js' %}"></script>
 {% endblock %}

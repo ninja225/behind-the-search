@@ -74,19 +74,7 @@ def create_section(request):
     return render(request, 'content/create_section.html', {'form': form})
 
 
-@access_required
-def video_list(request, section_id):
-    section = get_object_or_404(VideoSection, id=section_id)
 
-    videos = CourseVideo.objects.filter(
-        section=section).order_by('lesson_number')
-
-    context = {
-        'section': section,
-        'videos': videos,
-    }
-
-    return render(request, 'content/video_list.html', context)
 
 
 @access_required
@@ -114,7 +102,7 @@ def create_course_video(request):
         form = CourseVideoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('video_list_by_section', section_id=form.cleaned_data['section'].id)
+            return redirect('section_detail', section_id=form.cleaned_data['section'].id)
     else:
         form = CourseVideoForm()
 
@@ -135,7 +123,7 @@ def edit_course_video(request, video_id):
         if form.is_valid():
             form.save()
             section_id=form.cleaned_data['section'].id
-            return redirect('video_list_by_section', section_id)
+            return redirect('section_detail', section_id)
     else:
         form = CourseVideoForm(instance=video)
 
@@ -146,7 +134,7 @@ def edit_course_video(request, video_id):
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     video.delete()
-    return redirect('video_list_by_section', section_id=video.section.id)
+    return redirect('section_detail', section_id=video.section.id)
 
 
 @access_required
