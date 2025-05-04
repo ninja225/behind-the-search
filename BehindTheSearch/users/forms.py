@@ -7,11 +7,9 @@ from django import forms
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'email', 'username',
+        fields = ['full_name', 'email', 'username',
                   'password1', 'password2', 'phone_number']
-        labels = {
-            'first_name': 'Name',
-        }
+
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
