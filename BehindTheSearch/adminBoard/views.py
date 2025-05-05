@@ -11,6 +11,8 @@ from notifications.models import Notification
 
 # {pass data to Ninja Front}
 
+# {pass data to Ninja Front}
+
 
 @superuser_required
 def dashboard(request):
@@ -92,6 +94,7 @@ def ban_user(request, user_id):
     user.access = not user.access
     user.save()
 
+
     if notification := Notification.objects.filter(from_user=user, status='pending').exists() and user.access==False:
         notification = Notification.objects.filter(from_user=user, status='pending').latest('created_at')
         notification.status = 'rejected'
@@ -102,6 +105,8 @@ def ban_user(request, user_id):
         notification.status = 'accepted'
         notification.message = f"{notification.from_user.username} has been accepted."
         notification.save()
+
+
 
     # Log the activity
     activity_type = 'access_granted' if user.access else 'access_revoked'
