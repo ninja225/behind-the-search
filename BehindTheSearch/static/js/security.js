@@ -1,10 +1,144 @@
 (function () {
+  // Create securityWarningManager first so it's available globally in our scope
+  const securityWarningManager = {
+    activeWarnings: {},
+    showWarning(type, message, duration = 0) {
+      let el = document.getElementById(`security-warning-${type}`);
+      if (el) {
+        el.innerHTML = message;
+        return el;
+      }
+
+      el = document.createElement("div");
+      el.id = `security-warning-${type}`;
+      this.activeWarnings[type] = el;
+
+      if (type === "fullscreen") {
+        Object.assign(el.style, {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(35, 35, 47, 0.96)",
+          backdropFilter: "blur(10px)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "white",
+          textAlign: "center",
+          zIndex: "99999",
+          fontSize: "20px",
+          fontWeight: "bold",
+        });
+
+        el.innerHTML = `
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="var(--Error)" stroke-width="2"/>
+            <path d="M12 8V12" stroke="var(--Error)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="16" r="1" fill="var(--Error)"/>
+          </svg>
+          <p style="margin: 20px 0; max-width: 80%;">${message}</p>
+        `;
+
+        const btn = document.createElement("button");
+        btn.innerText = "Acknowledge";
+        Object.assign(btn.style, {
+          marginTop: "20px",
+          padding: "10px 20px",
+          background: "var(--Error)",
+          border: "none",
+          borderRadius: "4px",
+          color: "white",
+          cursor: "pointer",
+          fontWeight: "bold",
+        });
+        btn.addEventListener("click", () => {
+          if (!checkDevToolsStatus()) {
+            this.hideWarning(type);
+          } else {
+            showFullscreenWarning("⚠️ Please close DevTools first to continue.");
+          }
+        });
+        el.appendChild(btn);
+      } else {
+        Object.assign(el.style, {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          padding: "20px",
+          background: "var(--Error)",
+          color: "white",
+          textAlign: "center",
+          zIndex: "9999",
+          fontSize: "16px",
+        });
+        el.innerHTML = message;
+      }
+
+      document.body.appendChild(el);
+      if (duration > 0) setTimeout(() => this.hideWarning(type), duration);
+      return el;
+    },
+    hideWarning(type) {
+      const el = document.getElementById(`security-warning-${type}`);
+      if (el) {
+        el.remove();
+        delete this.activeWarnings[type];
+      }
+    },
+    hideAllWarnings() {
+      Object.keys(this.activeWarnings).forEach((type) =>
+        this.hideWarning(type)
+      );
+    },
+  };
+
+  // Define showFullscreenWarning before it's used
+  const showFullscreenWarning = (msg = "Security Alert: Unauthorized action detected.") => {
+    return securityWarningManager.showWarning("fullscreen", msg);
+  };
+
+  // Make these available to the window scope
+  window.securityWarningManager = securityWarningManager;
+  window.showFullscreenWarning = showFullscreenWarning;
+
+  const logSecurityEvent = async (type, description) => {
+    try {
+      const response = await fetch('/users/api/log-security-event/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ type, description })
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Error logging security event:', error);
+    }
+  };
+
   const applyNoBlur = () => {
     document.documentElement.style.filter = "none";
     if (document.body) document.body.style.filter = "none";
   };
 
-  // Apply no blur immediately
+  const checkDevToolsStatus = () => {
+    const widthThreshold = window.outerWidth - window.innerWidth > 160;
+    const heightThreshold = window.outerHeight - window.innerHeight > 160;
+    const devToolsOpen = widthThreshold || heightThreshold;
+
+    if (devToolsOpen) {
+      logSecurityEvent("devtools", "DevTools detected on page load");
+      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+      return true;
+    }
+    return false;
+  };
+
+  // Apply initial styles and checks
   applyNoBlur();
 
   // Inject style to override any blur filters
@@ -21,107 +155,26 @@
     sessionStorage.removeItem("devToolsDetected");
   } catch {}
 
+  // Check immediately when script loads
+  if (checkDevToolsStatus()) {
+    document.documentElement.style.visibility = 'hidden';
+    window.addEventListener('DOMContentLoaded', () => {
+      document.documentElement.style.visibility = '';
+    });
+  }
+
   const onDOMReady = () => {
-    applyNoBlur();
+    // Initial check on page load
+    if (checkDevToolsStatus()) {
+      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+    }
 
-    const securityWarningManager = {
-      activeWarnings: {},
-      showWarning(type, message, duration = 0) {
-        let el = document.getElementById(`security-warning-${type}`);
-        if (el) {
-          el.innerHTML = message;
-          return el;
-        }
-
-        el = document.createElement("div");
-        el.id = `security-warning-${type}`;
-        this.activeWarnings[type] = el;
-
-        if (type === "fullscreen") {
-          Object.assign(el.style, {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(35, 35, 47, 0.96)",
-            backdropFilter: "blur(10px)",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "white",
-            textAlign: "center",
-            zIndex: "99999",
-            fontSize: "20px",
-            fontWeight: "bold",
-          });
-
-          el.innerHTML = `
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="var(--Error)" stroke-width="2"/>
-              <path d="M12 8V12" stroke="var(--Error)" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="12" cy="16" r="1" fill="var(--Error)"/>
-            </svg>
-            <p style="margin: 20px 0; max-width: 80%;">${message}</p>
-          `;
-
-          const btn = document.createElement("button");
-          btn.innerText = "Acknowledge";
-          Object.assign(btn.style, {
-            marginTop: "20px",
-            padding: "10px 20px",
-            background: "var(--Error)",
-            border: "none",
-            borderRadius: "4px",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold",
-          });
-          btn.addEventListener("click", () => this.hideWarning(type));
-          el.appendChild(btn);
-        } else {
-          Object.assign(el.style, {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            padding: "20px",
-            background: "var(--Error)",
-            color: "white",
-            textAlign: "center",
-            zIndex: "9999",
-            fontSize: "16px",
-          });
-          el.innerHTML = message;
-        }
-
-        document.body.appendChild(el);
-        if (duration > 0) setTimeout(() => this.hideWarning(type), duration);
-        return el;
-      },
-      hideWarning(type) {
-        const el = document.getElementById(`security-warning-${type}`);
-        if (el) {
-          el.remove();
-          delete this.activeWarnings[type];
-        }
-      },
-      hideAllWarnings() {
-        Object.keys(this.activeWarnings).forEach((type) =>
-          this.hideWarning(type)
-        );
-      },
-    };
-
-    const showFullscreenWarning = (
-      msg = "Security Alert: Unauthorized action detected."
-    ) => {
-      securityWarningManager.showWarning("fullscreen", msg);
-    };
-
-    window.securityWarningManager = securityWarningManager;
-    window.showFullscreenWarning = showFullscreenWarning;
+    // Regular interval check
+    setInterval(() => {
+      if (checkDevToolsStatus()) {
+        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+      }
+    }, 1000);
 
     // Prevent right-click
     document.addEventListener("contextmenu", (e) => {
@@ -129,6 +182,9 @@
       if (["INPUT", "TEXTAREA"].includes(tag) || (tag === "A" && e.target.href))
         return;
       e.preventDefault();
+      if (checkDevToolsStatus()) {
+        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+      }
     });
 
     // Prevent text selection
@@ -175,41 +231,42 @@
 
     // Screenshot detection
     document.addEventListener("keyup", (e) => {
-      if (e.key === "PrintScreen")
-        showFullscreenWarning(
-          "Screen capture detected. This action has been logged."
-        );
+      if (e.key === "PrintScreen") {
+        logSecurityEvent("screenshot", "Screen capture attempt detected");
+        showFullscreenWarning("Screen capture detected. This action has been logged.");
+      }
     });
 
-    // Screenshot shortcut
+    // Security event handling
     window.addEventListener("keydown", (event) => {
       const key = event.key.toLowerCase();
 
       // Ctrl + S
       if (key === "s" && event.ctrlKey && !event.shiftKey) {
         event.preventDefault();
-        showFullscreenWarning(
-          "⚠️ Attempted to save the page (Ctrl + S). Logged."
-        );
+        logSecurityEvent("save_attempt", "Page save attempt (Ctrl + S)");
+        showFullscreenWarning("⚠️ Attempted to save the page (Ctrl + S). Logged.");
       }
 
       // Ctrl + P (Print)
       if (key === "p" && event.ctrlKey) {
         event.preventDefault();
+        logSecurityEvent("print_attempt", "Print command detected (Ctrl + P)");
         showFullscreenWarning("⚠️ Print command detected (Ctrl + P). Logged.");
       }
 
       // Ctrl + Shift + I (DevTools)
       if (key === "i" && event.ctrlKey && event.shiftKey) {
         event.preventDefault();
+        logSecurityEvent("devtools", "DevTools access attempt (Ctrl + Shift + I)");
         showFullscreenWarning("⚠️ DevTools access attempt detected. Logged.");
       }
+      
       // F12 (DevTools)
       if (event.key === "F12") {
         event.preventDefault();
-        showFullscreenWarning(
-          "⚠️ DevTools access attempt detected (F12). Logged."
-        );
+        logSecurityEvent("devtools", "DevTools access attempt (F12)");
+        showFullscreenWarning("⚠️ DevTools access attempt detected (F12). Logged.");
       }
     });
 
@@ -217,9 +274,8 @@
     if (navigator.mediaDevices?.getDisplayMedia) {
       const original = navigator.mediaDevices.getDisplayMedia;
       navigator.mediaDevices.getDisplayMedia = function (constraints) {
-        showFullscreenWarning(
-          "Screen recording attempt detected. This has been logged."
-        );
+        logSecurityEvent("screen_recording", "Screen recording attempt detected");
+        showFullscreenWarning("Screen recording attempt detected. This has been logged.");
         return original.call(this, constraints);
       };
     }
@@ -240,6 +296,9 @@
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
       applyNoBlur();
+      if (checkDevToolsStatus()) {
+        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+      }
       resizeTimeout = setTimeout(() => devToolsDetector.check(), 500);
     });
 
@@ -252,12 +311,19 @@
     console.log("%cContent is protected by copyright law.", "font-size: 15px;");
   };
 
+  // Add load event listener
+  window.addEventListener('load', () => {
+    if (checkDevToolsStatus()) {
+      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+    }
+  });
+
   document.addEventListener("DOMContentLoaded", onDOMReady);
 
   window.addEventListener("focus", () => {
     applyNoBlur();
-    if (window.securityWarningManager) {
-      window.securityWarningManager.hideWarning("devtools");
+    if (!checkDevToolsStatus()) {
+      window.securityWarningManager?.hideWarning("devtools");
     }
   });
 })();

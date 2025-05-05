@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.PageDurationMiddleware',  # Add the new middleware
 ]
 
 ROOT_URLCONF = 'behind_the_search.urls'
@@ -144,3 +145,20 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL = 'sections_list'
 LOGOUT_REDIRECT_URL = 'landing-page'
 
+# Discord Webhook Settings
+DISCORD_WEBHOOKS = {
+    # For new user registrations
+    'registration': 'https://discord.com/api/webhooks/1368746010687311955/ykmTl2PV6yjtyRYdCJDQEqtLfo9P0OkSbY0HCcIExZo3IJ9d7QjcdKyt0pcNbIpfmUrf',
+    # For user logins
+    'login': 'https://discord.com/api/webhooks/1368746035190694142/AluQTULY6iDaJ8eDVc4uS6lXwXnC0wWCpNnBTXhUOP3ocagQXZIAv9HeEVd0DVw9DFy-',
+    # For video watching activity
+    'video_watch': 'https://discord.com/api/webhooks/1368746039607034008/g7cDn8ummXM7DAxrcF8pIe0EHI42PerzxPTtwYJE8Co647KkR_AwWdySg2ZEUt4-ogV1',
+    # For page visit tracking
+    'page_visit': 'https://discord.com/api/webhooks/1368746042400706690/-faf-uybXOciwLf0fj0m7G8v_52x_p3oApOHvOh3ssn4-lJPrzUalURz9C-0pCfGsPut',
+    # For security events
+    'security': 'https://discord.com/api/webhooks/1368746044782805134/Z9PWTObj9-cgcQlrQvjG7WLOoIhEuN7V4i9cUUGnBxgbfPf3YyLg3oaFYJaLax1MqjWt',
+}
+
+# IP Geolocation API Key
+# Sign up at ipapi.com or similar service
+# IP_GEOLOCATION_API_KEY = 'YOUR_API_KEY_HERE'

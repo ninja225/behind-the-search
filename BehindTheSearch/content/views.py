@@ -11,15 +11,18 @@ import json
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from users.models import UserActivity  # Add this import
+from users.utils.discord_logger import log_video_watch
 
 
 @access_required
 def sections_list(request):
     # Fetch all VideoSection objects from the database
     sections = VideoSection.objects.all()
+    videos_count = CourseVideo.objects.all().count()
 
     context = {
         'sections': sections,
+        'videos_count': videos_count,
     }
 
     return render(request, 'content/sections_list.html', context)
@@ -78,21 +81,30 @@ def create_section(request):
 
 
 @access_required
-def video_detail(request, id):
-    video = get_object_or_404(CourseVideo, id=id)
+def video_detail(request, video_id):
+    video = get_object_or_404(CourseVideo, id=video_id)
+    section = video.section
 
-    # Get previous and next videos based on lesson number
-    prev_video = CourseVideo.objects.filter(
-        lesson_number__lt=video.lesson_number).order_by('-lesson_number').first()
+    # Get next and previous videos
     next_video = CourseVideo.objects.filter(
-        lesson_number__gt=video.lesson_number).order_by('lesson_number').first()
+        section=section,
+        lesson_number__gt=video.lesson_number
+    ).order_by('lesson_number').first()
+
+    prev_video = CourseVideo.objects.filter(
+        section=section,
+        lesson_number__lt=video.lesson_number
+    ).order_by('-lesson_number').first()
+
+    # Log video watch when accessed
+    log_video_watch(request, request.user, video)
 
     context = {
         'video': video,
+        'next_video': next_video,
         'prev_video': prev_video,
-        'next_video': next_video
+        'section': section
     }
-
     return render(request, 'content/video_detail.html', context)
 
 
