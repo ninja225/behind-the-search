@@ -5,7 +5,6 @@ import requests
 from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
-import pytz  # For proper timezone handling
 
 
 def get_client_ip(request):
@@ -106,7 +105,7 @@ def create_basic_embed_data(request, user, title, color):
     try:
         ip = get_client_ip(request)
         location = get_location_info(ip)
-        
+
         embed = create_base_embed(title, color)
 
         # Handle user info based on authentication status
@@ -140,7 +139,7 @@ def create_basic_embed_data(request, user, title, color):
                 'inline': True
             }
         ]
-        
+
         return embed
     except Exception as e:
         print(f"Error creating basic embed data: {e}")
@@ -163,7 +162,8 @@ def create_basic_embed_data(request, user, title, color):
 
 def log_user_registration(request, user):
     try:
-        embed = create_basic_embed_data(request, user, '✨ New User Registration', 0x2ecc71)  # Green
+        embed = create_basic_embed_data(
+            request, user, '✨ New User Registration', 0x2ecc71)  # Green
         send_discord_log('registration', embed)
     except Exception as e:
         print(f"Error in log_user_registration: {e}")
@@ -171,7 +171,8 @@ def log_user_registration(request, user):
 
 def log_user_login(request, user):
     try:
-        embed = create_basic_embed_data(request, user, '🔓 User Login', 0x3498db)  # Blue
+        embed = create_basic_embed_data(
+            request, user, '🔓 User Login', 0x3498db)  # Blue
         send_discord_log('login', embed)
     except Exception as e:
         print(f"Error in log_user_login: {e}")
@@ -179,7 +180,8 @@ def log_user_login(request, user):
 
 def log_video_watch(request, user, video):
     try:
-        embed = create_basic_embed_data(request, user, '📺 Video Watched', 0x9b59b6)  # Purple
+        embed = create_basic_embed_data(
+            request, user, '📺 Video Watched', 0x9b59b6)  # Purple
         embed['fields'].extend([
             {
                 'name': '\u200b',
@@ -199,7 +201,8 @@ def log_video_watch(request, user, video):
 
 def log_page_visit(request, user, page_name, duration):
     try:
-        embed = create_basic_embed_data(request, user, '🔍 Page Visit', 0xf1c40f)  # Yellow
+        embed = create_basic_embed_data(
+            request, user, '🔍 Page Visit', 0xf1c40f)  # Yellow
         embed['fields'].extend([
             {
                 'name': '\u200b',
@@ -219,7 +222,8 @@ def log_page_visit(request, user, page_name, duration):
 
 def log_security_event(request, user, event_type, description):
     try:
-        embed = create_basic_embed_data(request, user, '⚠️ Security Event', 0xe74c3c)  # Red
+        embed = create_basic_embed_data(
+            request, user, '⚠️ Security Event', 0xe74c3c)  # Red
         embed['fields'].extend([
             {
                 'name': '\u200b',
