@@ -25,8 +25,10 @@ def sections_list(request):
 @superuser_required
 def delete_section(request, section_id):
     section = get_object_or_404(VideoSection, id=section_id)
+    videos = CourseVideo.objects.filter(section=section)
+    videos.delete()
     section.delete()
-    return redirect('sections_list')\
+    return redirect('sections_list')
 
 
 @superuser_required
@@ -112,7 +114,7 @@ def create_course_video(request):
         form = CourseVideoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('video_list')
+            return redirect('video_list_by_section', section_id=form.cleaned_data['section'].id)
     else:
         form = CourseVideoForm()
 
@@ -132,7 +134,7 @@ def edit_course_video(request, video_id):
         form = CourseVideoForm(request.POST, request.FILES, instance=video)
         if form.is_valid():
             form.save()
-            return redirect('video_list')
+            return redirect('video_list_by_section', section_id=form.cleaned_data['section'].id)
     else:
         form = CourseVideoForm(instance=video)
 
@@ -144,7 +146,7 @@ def edit_course_video(request, video_id):
 def delete_course_video(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     video.delete()
-    return redirect('video_list')
+    return redirect('video_list_by_section', section_id=video.section.id)
 
 
 
