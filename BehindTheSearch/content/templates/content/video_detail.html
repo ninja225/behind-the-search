@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div class="video-detail-container">
   <div class="video-detail-header">
     <h1>{{ video.title }}</h1>

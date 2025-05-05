@@ -8,6 +8,9 @@ from django.http import Http404
 from django.http import FileResponse, JsonResponse
 from django.views.decorators.http import require_POST
 import json
+from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
+from users.models import UserActivity  # Add this import
 
 
 @access_required
@@ -143,14 +146,31 @@ def mark_video_watched(request, video_id):
         data = json.loads(request.body)
         watched = data.get('watched', False)
 
-        # Update the video's watched status
-        video.mark_as_watched = watched
-        video.save()
+        with transaction.atomic():
+            if watched:
+                video.completed_by.add(request.user)
+                # Create activity log for completion
+                UserActivity.objects.create(
+                    user=request.user,
+                    activity_type='video_watch',
+                    description=f'Completed watching video: {video.title}'
+                )
+            else:
+                video.completed_by.remove(request.user)
 
+            # Save any changes to the video
+            video.save()
+
+            return JsonResponse({
+                'success': True,
+                'watched': watched
+            })
+
+    except json.JSONDecodeError:
         return JsonResponse({
-            'success': True,
-            'watched': video.mark_as_watched
-        })
+            'success': False,
+            'error': 'Invalid JSON data'
+        }, status=400)
     except Exception as e:
         return JsonResponse({
             'success': False,

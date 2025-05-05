@@ -2,66 +2,69 @@ document.addEventListener("DOMContentLoaded", function () {
   // Handle mark as watched button
   const markAsWatchedBtn = document.getElementById("markAsWatched");
   if (markAsWatchedBtn) {
-    markAsWatchedBtn.addEventListener("click", function () {
+    markAsWatchedBtn.addEventListener("click", async function () {
       const videoId = this.dataset.videoId;
+      const currentState = this.classList.contains("watched");
+      const originalHtml = this.innerHTML;
+      
+      // Disable button while processing
+      this.disabled = true;
 
-      // Toggle button state immediately for better UX
-      this.classList.toggle("watched");
+      try {
+        // Send AJAX request to update watched status
+        const response = await fetch(`/content/api/videos/${videoId}/mark-watched/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCsrfToken(),
+          },
+          body: JSON.stringify({
+            watched: !currentState,
+          }),
+        });
 
-      if (this.classList.contains("watched")) {
-        this.innerHTML =
-          '<i class="fas fa-check-circle"></i> Marked as Watched';
-      } else {
-        this.innerHTML = '<i class="far fa-circle"></i> Mark as Watched';
-      }
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to update watched status");
+        }
 
-      // Send AJAX request to update watched status
-      fetch(`/content/api/videos/${videoId}/mark-watched/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCsrfToken(),
-        },
-        body: JSON.stringify({
-          watched: this.classList.contains("watched"),
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to update watched status");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Progress updated successfully", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          // Revert UI change on error
-          this.classList.toggle("watched");
-
-          if (this.classList.contains("watched")) {
-            this.innerHTML =
-              '<i class="fas fa-check-circle"></i> Marked as Watched';
+        // Only update UI after successful server response
+        if (data.success) {
+          // Update button state based on server response
+          if (data.watched) {
+            this.classList.add("watched");
+            this.innerHTML = '<i class="fas fa-check-circle"></i> Marked as Watched';
           } else {
+            this.classList.remove("watched");
             this.innerHTML = '<i class="far fa-circle"></i> Mark as Watched';
           }
-        });
-    });
-  }
 
-  // Helper function to get CSRF token
-  function getCsrfToken() {
-    const csrfInput = document.querySelector("[name=csrfmiddlewaretoken]");
-    if (csrfInput) {
-      return csrfInput.value;
-    } else {
-      // Try to get from cookie
-      return document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("csrftoken="))
-        ?.split("=")[1];
-    }
+          // Update the status indicator at the top of the page if it exists
+          const statusIndicator = document.querySelector('.video-detail-status');
+          if (statusIndicator) {
+            const iconSpan = statusIndicator.querySelector('i');
+            const textSpan = statusIndicator.querySelector('span');
+            
+            if (data.watched) {
+              iconSpan.className = 'fas fa-check-circle';
+              textSpan.textContent = 'Completed';
+            } else {
+              iconSpan.className = 'far fa-circle';
+              textSpan.textContent = 'Not yet completed';
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        // Keep the original state on error
+        this.innerHTML = originalHtml;
+        this.classList.toggle("watched", currentState);
+      } finally {
+        // Re-enable button after processing
+        this.disabled = false;
+      }
+    });
   }
 
   // Toggle description expand/collapse
@@ -80,8 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (isCollapsed) {
         toggleButton.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
       } else {
-        toggleButton.innerHTML =
-          '<i class="fas fa-chevron-down"></i> Show More';
+        toggleButton.innerHTML = '<i class="fas fa-chevron-down"></i> Show More';
       }
     });
 
@@ -103,5 +105,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Run on page load and window resize
     checkDescriptionLength();
     window.addEventListener("resize", checkDescriptionLength);
+  }
+
+  // Helper function to get CSRF token
+  function getCsrfToken() {
+    const csrfInput = document.querySelector("[name=csrfmiddlewaretoken]");
+    if (csrfInput) {
+      return csrfInput.value;
+    }
+    // Fallback to cookie if token not found in form
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      ?.split("=")[1];
   }
 });

@@ -68,33 +68,32 @@
             <table class="users-table">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Join Date</th>
-                        <th>Actions</th>
+                        <th class="mobile-show">User</th>
+                        <th class="mobile-hide">Full Name</th>
+                        <th class="mobile-hide">Email</th>
+                        <th class="mobile-hide">Phone</th>
+                        <th class="mobile-show">Status</th>
+                        <th class="mobile-hide">Join Date</th>
+                        <th class="mobile-show">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.phone }}</td>
-                        <td>
+                        <td class="mobile-show">{{ user.username }}</td>
+                        <td class="mobile-hide">{{ user.full_name }}</td>
+                        <td class="mobile-hide">{{ user.email }}</td>
+                        <td class="mobile-hide">{{ user.phone_number }}</td>
+                        <td class="mobile-show">
                             <span class="status-badge {% if user.access %}status-active{% else %}status-pending{% endif %}">
                                 {% if user.access %}Active{% else %}Pending{% endif %}
                             </span>
                         </td>
-                        <td>{{ user.date_joined|date:"M d, Y" }}</td>
-                        <td class="table-actions-cell">
+                        <td class="mobile-hide">{{ user.date_joined|date:"M d, Y" }}</td>
+                        <td class="mobile-show table-actions-cell">
                             <a href="{% url 'user' user.id %}" class="action-btn" title="View Details">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <button class="action-btn" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
                             {% if not user.access %}
                             <button class="action-btn" title="Grant Access">
                                 <i class="fas fa-check"></i>

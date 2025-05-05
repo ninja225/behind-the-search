@@ -80,7 +80,14 @@
         <div class="site-title">
           <h1 class="gradient-text">Behind The Search</h1>
         </div>
-        <div class="nav-links">
+        
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Navigation Links -->
+        <div class="nav-links" id="navLinks">
           {% if user.is_authenticated %}
           <a href="{% if user.access %}{% url 'sections_list' %}{% else %}{% url 'waiting-page' %}{% endif %}" class="nav-button btn-course">
             <i class="fas fa-play-circle"></i>
@@ -92,6 +99,7 @@
           {% if user.is_superuser %}
           <a href="{% url 'admin-dashboard' %}" class="nav-button btn-admin" title="Admin Dashboard">
             <i class="fas fa-cog"></i>
+            <span>Admin</span>
           </a>
           {% endif %}
           {% else %}
@@ -170,15 +178,22 @@
 
         return toast;
       }
+
+      // Mobile Menu Toggle Functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        mobileMenuToggle.addEventListener("click", function () {
+          navLinks.classList.toggle("active");
+        });
+      });
     </script>
 
-    <!-- Video.js Core and Security Scripts -->
-    <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
-    <script src="{% static 'js/videojs-security.js' %}"></script>
     <!-- Vanilla Toast - Simple Toast Notifications -->
     <script src="https://cdn.jsdelivr.net/npm/vanillatoasts@1.4.0/vanillatoasts.js"></script>
     <!-- Security Script - Loads early to prevent tampering -->
-    <!-- <script src="{% static 'js/security.js' %}"></script> -->
+    <script src="{% static 'js/security.js' %}"></script>
 
     <!-- Additional JavaScript -->
     {% block extra_js %}{% endblock %}
