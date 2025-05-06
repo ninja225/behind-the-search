@@ -73,23 +73,30 @@
                         <h2 class="user-name">{{ user.username }}</h2>
                         <p class="user-full-name">{{ user.full_name }}</p>
                         <p class="user-email">{{ user.email }}</p>
-                        <div class="user-actions">
-                            {% if not user.access %}
-                            <button class="action-button" data-action="access" data-user-id="{{ user.id }}" data-current-status="{{ user.access|lower }}">
-                                <i class="fas fa-user-check"></i>
-                                <span>Grant Access</span>
-                            </button>
-                            {% else %}
-                            <button class="action-button" data-action="access" data-user-id="{{ user.id }}" data-current-status="{{ user.access|lower }}">
-                                <i class="fas fa-user-slash"></i>
-                                <span>Revoke Access</span>
-                            </button>
-                            {% endif %}
-                            <button class="action-button" data-action="email" data-email="{{ user.email }}">
-                                <i class="fas fa-envelope"></i>
-                                <span>Send Message</span>
-                            </button>
-                        </div>
+                    <div class="user-actions">
+                    {% if not user.access %}
+                    <button class="action-button" data-action="access" data-user-id="{{ user.id }}" data-current-status="{{ user.access|lower }}">
+                    <i class="fas fa-user-check"></i>
+                    <span>Grant Access</span>
+                    </button>
+                    {% else %}
+                    <button class="action-button" data-action="access" data-user-id="{{ user.id }}" data-current-status="{{ user.access|lower }}">
+                    <i class="fas fa-user-slash"></i>
+                    <span>Revoke Access</span>
+                    </button>
+                    {% endif %}
+                    <button class="action-button" data-action="email" data-email="{{ user.email }}">
+                              <i class="fas fa-envelope"></i>
+                                                        <span>Send Message</span>
+
+    <form action="{% url 'delete_user' user.id %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button class="action-button delete-button" onclick="return confirm('Are you sure you want to delete this user?');">
+            <i class="fas fa-trash-alt"></i>
+            <span>Delete</span>
+        </button>
+    </form>
+</div>
                     </div>
                 </div>
             </div>
