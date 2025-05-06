@@ -3,4 +3,5 @@ gunicorn
 requests
 geoip2
 django-phone-field
+django-phonenumber-field[phonenumberslite]
 whitenoise
