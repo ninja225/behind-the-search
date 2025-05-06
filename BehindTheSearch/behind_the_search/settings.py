@@ -49,7 +49,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -168,3 +168,4 @@ DISCORD_WEBHOOKS = {
 # Sign up at ipapi.com or similar service
 # IP_GEOLOCATION_API_KEY = 'YOUR_API_KEY_HERE'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
