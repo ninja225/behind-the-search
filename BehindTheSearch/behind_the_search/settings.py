@@ -26,7 +26,14 @@ SECRET_KEY = 'django-insecure-tp6n30jo9e_sfal453(4#fsr5vl82bzv4tz@8!0tbm!c531tyx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['behind-the-search-production.up.railway.app']
+ALLOWED_HOSTS = [
+    'behind-the-search-production.up.railway.app',  # Add your Railway domain
+    'localhost',  # if testing locally
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://behind-the-search-production.up.railway.app',  # Include https!
+]
 
 
 # Application definition
