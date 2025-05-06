@@ -1,6 +1,5 @@
-Django>=4.2,<5.0
-gunicorn
-requests
-geoip2
-django-phonenumber-field[phonenumberslite]
-whitenoise
+Django==4.2.20
+requests==2.32.3
+geoip2==5.1.0
+django-phone-field==1.8.1
+whitenoise==6.9.0
