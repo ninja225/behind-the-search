@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: behind-the-search-web
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn behind_the_search.wsgi:application"
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: behind_the_search.settings

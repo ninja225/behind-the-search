@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-tp6n30jo9e_sfal453(4#fsr5vl82bzv4tz@8!0tbm!c531tyx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['behind-the-search-production.up.railway.app']
 
 
 # Application definition
@@ -47,7 +47,12 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -162,3 +167,4 @@ DISCORD_WEBHOOKS = {
 # IP Geolocation API Key
 # Sign up at ipapi.com or similar service
 # IP_GEOLOCATION_API_KEY = 'YOUR_API_KEY_HERE'
+
