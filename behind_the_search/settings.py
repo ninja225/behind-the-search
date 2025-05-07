@@ -32,7 +32,6 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'behind-the-search-7.onrender.com',
     'https://behind-the-search-7.onrender.com'
 ]
 
