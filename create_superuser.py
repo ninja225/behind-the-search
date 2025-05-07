@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BehindTheSearch.settings')  # تأكد أن الاسم صحيح
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'behind_the_search.settings')  # تأكد أن الاسم صحيح
 django.setup()
 
 from django.contrib.auth import get_user_model
