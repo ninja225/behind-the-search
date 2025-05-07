@@ -6,3 +6,4 @@ whitenoise==6.9.0
 geoip2==5.1.0
 phonenumbers==8.13.33
 gunicorn==23.0.0
+psycopg2
