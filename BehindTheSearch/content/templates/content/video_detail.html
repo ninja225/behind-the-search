@@ -25,9 +25,9 @@
       <span>Lesson {{ video.lesson_number }}</span>
     </div>
     <div class="video-detail-meta-item">
-      <i class="{% if video.mark_as_watched %}fas fa-check-circle{% else %}far fa-circle{% endif %}"></i>
+      <i class="{% if video_is_watched_by_user %}fas fa-check-circle{% else %}far fa-circle{% endif %}"></i>
       <span>
-        {% if video.mark_as_watched %}
+        {% if video_is_watched_by_user %}
           Completed
         {% else %}
           Not yet completed
@@ -68,9 +68,9 @@
     <div class="video-detail-actions">
       <button
         id="markAsWatched"
-        class="video-detail-mark-watched {% if video.mark_as_watched %}watched{% endif %}"
+        class="video-detail-mark-watched {% if video_is_watched_by_user %}watched{% endif %}"
         data-video-id="{{ video.id }}">
-        {% if video.mark_as_watched %}
+        {% if video_is_watched_by_user %}
           <i class="fas fa-check-circle"></i> Marked as Watched
         {% else %}
           <i class="far fa-circle"></i> Mark as Watched
@@ -81,25 +81,19 @@
 
   <div class="video-detail-navigation">
     {% if prev_video %}
-    <a
-      href="{% url 'video_detail' prev_video.id %}"
-      class="video-detail-nav-button prev"
-    >
-      <i class="fas fa-arrow-left"></i> Previous Lesson
-    </a>
-    {% endif %} 
+      <a href="{% url 'video_detail' prev_video.id %}" class="video-detail-nav-button prev">
+        <i class="fas fa-arrow-left"></i> Previous Lesson
+      </a>
+    {% endif %}
     
     {% if next_video %}
-    <a
-      href="{% url 'video_detail' next_video.id %}"
-      class="video-detail-nav-button next"
-    >
-      Next Lesson <i class="fas fa-arrow-right"></i>
-    </a>
+      <a href="{% url 'video_detail' next_video.id %}" class="video-detail-nav-button next">
+        Next Lesson <i class="fas fa-arrow-right"></i>
+      </a>
     {% endif %}
   </div>
 </div>
-{% endblock %} 
+{% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/content/video-details.js' %}"></script>

@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'behind-the-search-production.up.railway.app',  # Add your Railway domain
     'localhost',  # if testing locally
+    '127.0.0.1'
 ]
 
 CSRF_TRUSTED_ORIGINS = [

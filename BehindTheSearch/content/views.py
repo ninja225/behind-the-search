@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CourseVideo, VideoSection
+from .models import CourseVideo, VideoSection,UserVideoProgress
 from .forms import CourseVideoForm, VideoSectionForm
 from adminBoard.decorators import superuser_required, access_required
 from django.contrib.auth.decorators import login_required
@@ -84,7 +84,8 @@ def create_section(request):
 def video_detail(request, video_id):
     video = get_object_or_404(CourseVideo, id=video_id)
     section = video.section
-
+    is_watched = UserVideoProgress.objects.filter(
+        user=request.user, video=video, mark_as_watched=True).exists()
     # Get next and previous videos
     next_video = CourseVideo.objects.filter(
         section=section,
@@ -103,7 +104,8 @@ def video_detail(request, video_id):
         'video': video,
         'next_video': next_video,
         'prev_video': prev_video,
-        'section': section
+        'section': section,
+        'video_is_watched_by_user': is_watched
     }
     return render(request, 'content/video_detail.html', context)
 
@@ -152,6 +154,9 @@ def delete_course_video(request, video_id):
 @access_required
 @require_POST
 def mark_video_watched(request, video_id):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
     video = get_object_or_404(CourseVideo, id=video_id)
 
     try:
@@ -159,36 +164,30 @@ def mark_video_watched(request, video_id):
         watched = data.get('watched', False)
 
         with transaction.atomic():
+            progress, created = UserVideoProgress.objects.get_or_create(
+                user=request.user,
+                video=video,
+                defaults={'mark_as_watched': watched}
+            )
+
+            if not created:
+                progress.mark_as_watched = watched
+                progress.save()
+
             if watched:
-                video.completed_by.add(request.user)
-                # Create activity log for completion
+                # Log activity only on watch
                 UserActivity.objects.create(
                     user=request.user,
                     activity_type='video_watch',
                     description=f'Completed watching video: {video.title}'
                 )
-            else:
-                video.completed_by.remove(request.user)
 
-            # Save any changes to the video
-            video.save()
-
-            return JsonResponse({
-                'success': True,
-                'watched': watched
-            })
+        return JsonResponse({'success': True, 'watched': watched})
 
     except json.JSONDecodeError:
-        return JsonResponse({
-            'success': False,
-            'error': 'Invalid JSON data'
-        }, status=400)
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data'}, status=400)
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'error': str(e)
-        }, status=400)
-
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 # API endpoint to check if a lesson number already exists {Ninja- Ai}
 def check_lesson_number(request):
