@@ -27,3 +27,13 @@ class CourseVideo(models.Model):
 
     class Meta:
         unique_together = ('section', 'lesson_number')
+
+
+class UserVideoProgress(models.Model):
+    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE)
+    video = models.ForeignKey(CourseVideo, on_delete=models.CASCADE)
+    mark_as_watched = models.BooleanField(default=False)
+    watched_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'video')
