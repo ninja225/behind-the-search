@@ -8,9 +8,9 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-username = os.getenv("DJANGO_SUPERUSER_USERNAME", "admin")
-email = os.getenv("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
-password = os.getenv("DJANGO_SUPERUSER_PASSWORD", "adminpass123")
+username = os.getenv("DJANGO_SUPERUSER_USERNAME", "marwangamal")
+email = os.getenv("DJANGO_SUPERUSER_EMAIL", "marwanahmed1206@gmail.com")
+password = os.getenv("DJANGO_SUPERUSER_PASSWORD", "mg120604")
 
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username=username, email=email, password=password)
