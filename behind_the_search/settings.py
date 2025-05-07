@@ -28,8 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'behind-the-search-production.up.railway.app',  # Add your Railway domain
-    'localhost',  # if testing locally
-    '127.0.0.1'
+    'behind-the-search-5.onrender.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
