@@ -27,7 +27,6 @@ SECRET_KEY = 'django-insecure-tp6n30jo9e_sfal453(4#fsr5vl82bzv4tz@8!0tbm!c531tyx
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'behind-the-search-production.up.railway.app',  # Add your Railway domain
     'behind-the-search-5.onrender.com'
 ]
 
