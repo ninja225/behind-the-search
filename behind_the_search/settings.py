@@ -28,10 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'behind-the-search-7.onrender.com',
+    'https://behind-the-search-7.onrender.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://behind-the-search-production.up.railway.app',  # Include https!
+    'behind-the-search-7.onrender.com',
+    'https://behind-the-search-7.onrender.com'
 ]
 
 
