@@ -27,12 +27,12 @@ SECRET_KEY = 'django-insecure-tp6n30jo9e_sfal453(4#fsr5vl82bzv4tz@8!0tbm!c531tyx
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'behind-the-search-7.onrender.com',
-    'https://behind-the-search-7.onrender.com'
+    'behind-the-search.onrender.com',
+    'https://behind-the-search.onrender.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://behind-the-search-7.onrender.com'
+    'https://behind-the-search.onrender.com'
 ]
 
 
