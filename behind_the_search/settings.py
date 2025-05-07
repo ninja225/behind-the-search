@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'behind-the-search.onrender.com',
-    'https://behind-the-search.onrender.com'
+    'https://behind-the-search.onrender.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [

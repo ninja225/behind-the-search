@@ -15,9 +15,16 @@
 <div class="video-detail-container">
   <div class="video-detail-header">
     <h1>{{ video.title }}</h1>
-    <a href="{% url 'section_detail' video.section.id %}" class="back-button">
-      <i class="fas fa-arrow-left"></i> Back to Video List
-    </a>
+    <div class="header-actions">
+      <a href="{% url 'section_detail' video.section.id %}" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to Video List
+      </a>
+      {% if user.is_superuser %}
+        <a href="{% url 'edit_course_video' video.id %}" class="edit-button">
+          <i class="fas fa-edit"></i> Edit Video
+        </a>
+      {% endif %}
+    </div>
   </div>
 
   <div class="video-detail-meta">
