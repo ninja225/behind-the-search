@@ -162,29 +162,20 @@
       document.documentElement.style.visibility = '';
     });
   }
-
   const onDOMReady = () => {
     // Initial check on page load
-    if (checkDevToolsStatus()) {
-      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
-    }
+    checkDevToolsStatus();
 
-    // Regular interval check
+    // Regular interval check - without showing fullscreen warning
     setInterval(() => {
-      if (checkDevToolsStatus()) {
-        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
-      }
-    }, 1000);
-
-    // Prevent right-click
+      checkDevToolsStatus();
+    }, 1000);    // Prevent right-click
     document.addEventListener("contextmenu", (e) => {
       const tag = e.target.tagName;
       if (["INPUT", "TEXTAREA"].includes(tag) || (tag === "A" && e.target.href))
         return;
       e.preventDefault();
-      if (checkDevToolsStatus()) {
-        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
-      }
+      checkDevToolsStatus(); // Just check but don't show warning
     });
 
     // Prevent text selection
@@ -253,20 +244,18 @@
         event.preventDefault();
         logSecurityEvent("print_attempt", "Print command detected (Ctrl + P)");
         showFullscreenWarning("⚠️ Print command detected (Ctrl + P). Logged.");
-      }
-
-      // Ctrl + Shift + I (DevTools)
+      }      // Ctrl + Shift + I (DevTools)
       if (key === "i" && event.ctrlKey && event.shiftKey) {
         event.preventDefault();
         logSecurityEvent("devtools", "DevTools access attempt (Ctrl + Shift + I)");
-        showFullscreenWarning("⚠️ DevTools access attempt detected. Logged.");
+        // DevTools warning removed to fix iPhone issues
       }
       
       // F12 (DevTools)
       if (event.key === "F12") {
         event.preventDefault();
         logSecurityEvent("devtools", "DevTools access attempt (F12)");
-        showFullscreenWarning("⚠️ DevTools access attempt detected (F12). Logged.");
+        // DevTools warning removed to fix iPhone issues
       }
     });
 
@@ -290,15 +279,11 @@
       });
     });
 
-    setTimeout(() => devToolsDetector.check(), 2000);
-
-    let resizeTimeout;
+    setTimeout(() => devToolsDetector.check(), 2000);    let resizeTimeout;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
       applyNoBlur();
-      if (checkDevToolsStatus()) {
-        showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
-      }
+      checkDevToolsStatus(); // Just check but don't show warning
       resizeTimeout = setTimeout(() => devToolsDetector.check(), 500);
     });
 
@@ -310,12 +295,9 @@
     console.log("%cThis is a protected website.", "font-size: 20px;");
     console.log("%cContent is protected by copyright law.", "font-size: 15px;");
   };
-
   // Add load event listener
   window.addEventListener('load', () => {
-    if (checkDevToolsStatus()) {
-      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
-    }
+    checkDevToolsStatus(); // Just check without showing warning
   });
 
   document.addEventListener("DOMContentLoaded", onDOMReady);
