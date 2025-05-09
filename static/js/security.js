@@ -132,7 +132,7 @@
 
     if (devToolsOpen) {
       logSecurityEvent("devtools", "DevTools detected on page load");
-      showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
+      // showFullscreenWarning("⚠️ DevTools must be closed to access this site.");
       return true;
     }
     return false;
