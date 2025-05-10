@@ -25,9 +25,8 @@
       class="section-card"
       data-aos="fade-up"
       data-aos-delay="{{ forloop.counter|add:100 }}"
-    >
-      <div class="section-card-header">
-        <h2 class="section-card-title">{{ section.title }}</h2>
+    >      <div class="section-card-header">
+        <h2 class="section-card-title"><span class="section-number">Section {{ section.section_number }}</span> {{ section.title }}</h2>
       </div>
       <div class="section-card-body">
         <div class="section-card-description">
@@ -53,4 +52,8 @@
   </div>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/section_list.js' %}"></script>
 {% endblock %}

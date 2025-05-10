@@ -63,7 +63,7 @@
   <div class="section-main-wrapper">
     <div class="section-detail-container">
       <div class="section-detail-header">
-        <h1>{{ section.title }}</h1>
+        <h1><span class="section-number">Section {{ section.section_number }}:</span> {{ section.title }}</h1>
         
         {% if user.is_superuser %}
         <div class="section-actions">

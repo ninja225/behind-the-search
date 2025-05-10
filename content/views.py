@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CourseVideo, VideoSection,UserVideoProgress
+from .models import CourseVideo, VideoSection, UserVideoProgress
 from .forms import CourseVideoForm, VideoSectionForm
 from adminBoard.decorators import superuser_required, access_required
 from django.contrib.auth.decorators import login_required
@@ -16,8 +16,8 @@ from users.utils.discord_logger import log_video_watch
 
 @access_required
 def sections_list(request):
-    # Fetch all VideoSection objects from the database
-    sections = VideoSection.objects.all()
+    # Fetch all VideoSection objects and sort by section_number ascending
+    sections = VideoSection.objects.all().order_by('section_number')
     videos_count = CourseVideo.objects.all().count()
 
     context = {
@@ -190,6 +190,8 @@ def mark_video_watched(request, video_id):
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 # API endpoint to check if a lesson number already exists {Ninja- Ai}
+
+
 def check_lesson_number(request):
     """
     Checks if a lesson number already exists within a specific section.
